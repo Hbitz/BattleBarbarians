@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BattleBarbarians
 {
-    internal abstract class Character<T> where T : Attack
+    internal abstract class Character<T> where T : Character<T>
     {
         // Properties
         public string Name { get; set; }
@@ -15,30 +15,18 @@ namespace BattleBarbarians
         public int Mana { get; set; }
         public int MaxMana { get; set; }
         public int AttackPower { get; set; }
-        public List<T> Attacks { get; set; } // Generic lista with attacks
+        public List<Attack> Attacks { get; set; } // Generic lista with attacks
 
-        public Character(string name, int health, int mana, int attackPower, List<T> attacks)
+        public Character(string name, int health, int mana, int attackPower, List<Attack> attacks)
         {
             Name = name;
             Health = MaxHealth = health;
             Mana = MaxMana = mana;
             AttackPower = attackPower;
-            Attacks = attacks ?? new List<T>();
+            Attacks = attacks ?? new List<Attack>();
         }
 
-        public virtual void PerformAttack(Character<T> target, T attack)
-        {
-            if (Mana >= attack.ManaCost)
-            {
-                Mana -= attack.ManaCost;
-                target.TakeDamage(attack.Damage);
-                Console.WriteLine($"{Name} used {attack.Name} on {target.Name} for {attack.Damage} damage!");
-            }
-            else
-            {
-                Console.WriteLine($"{Name} tried to use {attack.Name}, but didn't have enough Mana!");
-            }
-        }
+        public abstract void PerformAttack(Character<T> target);
 
         public void TakeDamage(int damage)
         {
