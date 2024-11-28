@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace BattleBarbarians
 {
-    internal class Troll : Character<Troll>
+    internal class Troll : Character
     {
         private Random random;
 
@@ -29,7 +29,7 @@ namespace BattleBarbarians
             random = new Random();
         }
 
-        public override void PerformAttack(Character<Troll> target)
+        public override void PerformAttack(Character target)
         {
             Attack chosenAttack = Attacks[random.Next(Attacks.Count)];
 

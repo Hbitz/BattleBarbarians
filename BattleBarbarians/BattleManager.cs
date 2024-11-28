@@ -6,11 +6,11 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-internal class BattleManager<TCharacter> where TCharacter : Character<TCharacter>
+internal class BattleManager
 {
-    public void StartBattle(TCharacter player)
+    public void StartBattle(Character player)
     {
-        TCharacter enemy = GenerateRandomEnemy();
+        Character enemy = GenerateRandomEnemy();
 
         while (player.IsAlive() && enemy.IsAlive())
         {
@@ -40,24 +40,24 @@ internal class BattleManager<TCharacter> where TCharacter : Character<TCharacter
         }
     }
 
-    private TCharacter GenerateRandomEnemy()
+    private Character GenerateRandomEnemy()
     {
         Random rand = new Random();
         int enemyType = rand.Next(1, 4);  
         switch (enemyType)
         {
             case 1:
-                return new Rat() as TCharacter;
+                return new Rat();
             case 2:
-                return new Goblin() as TCharacter;
+                return new Goblin();
             case 3:
-                return new Troll() as TCharacter;
+                return new Troll();
             default:
-                return new Rat() as TCharacter;
+                return new Rat();
         }
     }
 
-    private void GiveReward(TCharacter player)
+    private void GiveReward(Character player)
     {
         Random rand = new Random();
         int rewardChance = rand.Next(1, 101); 

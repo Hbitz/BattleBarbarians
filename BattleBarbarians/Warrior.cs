@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace BattleBarbarians
 {
-    internal class Warrior : Character<Warrior>
+    internal class Warrior : Character
     {
         public Warrior(string name) 
             : base(
@@ -23,10 +23,13 @@ namespace BattleBarbarians
             
         }
 
-        public override void PerformAttack(Character<Warrior> target)
+        public override void PerformAttack(Character target)
         {
-            Console.WriteLine($"{Name} attacks {target.Name} with Slash, causing {AttackPower} damage.");
-            target.Health -= AttackPower;
+            int attackChoice = ChooseAttack();
+
+            Attack selectedAttack = Attacks[attackChoice];
+            Console.WriteLine($"{Name} attacks {target.Name} with {selectedAttack.Name}, causing {AttackPower} damage.");
+            target.TakeDamage(selectedAttack.Damage);
         }
     }
 }

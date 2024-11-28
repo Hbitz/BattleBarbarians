@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BattleBarbarians
 {
-    internal abstract class Character<T> where T : Character<T>
+    internal abstract class Character
     {
         // Properties
         public string Name { get; set; }
@@ -26,7 +26,43 @@ namespace BattleBarbarians
             Attacks = attacks ?? new List<Attack>();
         }
 
-        public abstract void PerformAttack(Character<T> target);
+        public abstract void PerformAttack(Character target);
+
+        // Todo - validation
+        public int ChooseAttack()
+        {
+            // Visa alla tillgängliga attacker för spelaren
+            Console.WriteLine($"{Name}, välj en attack:");
+            for (int i = 0; i < Attacks.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {Attacks[i].Name} (Skada: {Attacks[i].Damage})");
+            }
+
+            // Läs spelarens val av attack
+            int attackChoice = 0;
+            bool validChoice = false;
+
+            // Läs in spelarens val tills det är ett giltigt val
+            while (!validChoice)
+            {
+                Console.Write("Välj en attack (1 - {0}): ", Attacks.Count);
+                string input = Console.ReadLine();
+
+                // Försök att konvertera spelarens input till ett heltal
+                if (int.TryParse(input, out attackChoice) && attackChoice >= 1 && attackChoice <= Attacks.Count)
+                {
+                    validChoice = true; // Validerad input
+                    attackChoice -= 1; // Subtrahera 1 för att matcha indexet i listan
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltigt val, försök igen.");
+                }
+            }
+
+            return attackChoice; // Returvalet för attacken
+        }
+
 
         public void TakeDamage(int damage)
         {

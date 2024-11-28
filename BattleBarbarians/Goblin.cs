@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace BattleBarbarians
 {
-    internal class Goblin : Character<Goblin>
+    internal class Goblin : Character
     {
         private Random random;
 
@@ -28,7 +28,7 @@ namespace BattleBarbarians
             random = new Random();
         }
 
-        public override void PerformAttack(Character<Goblin> target)
+        public override void PerformAttack(Character target)
         {
             int attackIndex = random.Next(Attacks.Count);
             Attack chosenAttack = Attacks[attackIndex];

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace BattleBarbarians
 {
-    internal class Berserker : Character<Berserker>
+    internal class Berserker : Character
     {
         private int baseAttackPower; // Unique to berserker class
+        bool wasInBerserkState = false;
         public Berserker(string name)
             : base(
                   name, // Player name
@@ -25,24 +26,31 @@ namespace BattleBarbarians
             baseAttackPower = AttackPower;
         }
 
-        public override void PerformAttack(Character<Berserker> target)
+        public override void PerformAttack(Character target)
         {
-            // To add some identify to our berserker, he get's a 30% damage bonus when below half hp.
+            // Reset our base attack power so we don't get a stacking 30% buff every turn
+            AttackPower = baseAttackPower;
+
+            // To add some identity to our berserker, he gets a 30% damage bonus when below half HP
             if (Health < MaxHealth / 2)
             {
+                wasInBerserkState = true; // Start tracking our berserk state
                 AttackPower = (int)(AttackPower * 1.3);
                 Console.WriteLine($"{Name} is in a berserk state, increasing damage by 30%!");
             }
-            else
+            else if (wasInBerserkState && Health > MaxHealth / 2)
             {
-                AttackPower = baseAttackPower;
-                Console.WriteLine($"{Name} is no longer in berserk state");
+                wasInBerserkState = false;
+                Console.WriteLine($"{Name} is no longer in berserk state.");
             }
 
-            // TODO - 
-            Console.WriteLine($"{Name} attacks {target.Name} with Furious Slash, causing {AttackPower} damage.");
-            target.Health -= AttackPower;
+            int attackChoice = ChooseAttack();
+
+            Attack selectedAttack = Attacks[attackChoice];
+            Console.WriteLine($"{Name} använder {selectedAttack.Name}!");
+            target.TakeDamage(selectedAttack.Damage);
         }
+
     }
 }
 

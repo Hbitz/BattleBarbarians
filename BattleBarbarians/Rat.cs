@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace BattleBarbarians
 {
-    internal class Rat : Character<Rat>
+    internal class Rat : Character
     {
         // Easy and predictable enemy.
         public Rat()
@@ -26,7 +26,7 @@ namespace BattleBarbarians
         {
         }
 
-        public override void PerformAttack(Character<Rat> target)
+        public override void PerformAttack(Character target)
         {
             Console.WriteLine($"{Name} attacks {target.Name} with Bite, causing {AttackPower} damage.");
             target.Health -= AttackPower;
