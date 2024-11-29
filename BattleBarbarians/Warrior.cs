@@ -16,7 +16,7 @@ namespace BattleBarbarians
                   50,   // Mana
                   30,   // Attack power
                   new List<Attack> { 
-                      new Attack("Slash", 25, 10, "A powerful slashing attack.") 
+                      new Attack("Slash", 25, 5, "A powerful slashing attack.") 
                   }
               )
         {
