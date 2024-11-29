@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Spectre.Console;
 
 namespace BattleBarbarians
 {
@@ -31,36 +32,49 @@ namespace BattleBarbarians
         // Todo - validation
         public int ChooseAttack()
         {
+            var choices = new List<string>();
+
             // Visa alla tillgängliga attacker för spelaren
-            Console.WriteLine($"{Name}, välj en attack:");
+            //Console.WriteLine($"{Name}, välj en attack:");
             for (int i = 0; i < Attacks.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {Attacks[i].Name} (Skada: {Attacks[i].Damage})");
+                choices.Add($"{Attacks[i].Name} Skada: {Attacks[i].Damage}, manacost: {Attacks[i].ManaCost}");
             }
 
-            // Läs spelarens val av attack
-            int attackChoice = 0;
-            bool validChoice = false;
+            string selectedAttack = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                .Title($"{Name}, Välj en attack:")
+                .AddChoices(choices)
+                .HighlightStyle(new Style(foreground: Color.Red))
+            );
 
-            // Läs in spelarens val tills det är ett giltigt val
-            while (!validChoice)
-            {
-                Console.Write("Välj en attack (1 - {0}): ", Attacks.Count);
-                string input = Console.ReadLine();
+            int attackChoice = choices.IndexOf(selectedAttack); ;
 
-                // Försök att konvertera spelarens input till ett heltal
-                if (int.TryParse(input, out attackChoice) && attackChoice >= 1 && attackChoice <= Attacks.Count)
-                {
-                    validChoice = true; // Validerad input
-                    attackChoice -= 1; // Subtrahera 1 för att matcha indexet i listan
-                }
-                else
-                {
-                    Console.WriteLine("Ogiltigt val, försök igen.");
-                }
-            }
+            return attackChoice;
 
-            return attackChoice; // Returvalet för attacken
+            //// Läs spelarens val av attack
+            //int attackChoice = 0;
+            //bool validChoice = false;
+
+            //// Läs in spelarens val tills det är ett giltigt val
+            //while (!validChoice)
+            //{
+            //    Console.Write("Välj en attack (1 - {0}): ", Attacks.Count);
+            //    string input = Console.ReadLine();
+
+            //    // Försök att konvertera spelarens input till ett heltal
+            //    if (int.TryParse(input, out attackChoice) && attackChoice >= 1 && attackChoice <= Attacks.Count)
+            //    {
+            //        validChoice = true; // Validerad input
+            //        attackChoice -= 1; // Subtrahera 1 för att matcha indexet i listan
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Ogiltigt val, försök igen.");
+            //    }
+            //}
+
+            //return attackChoice; // Returvalet för attacken
         }
 
 

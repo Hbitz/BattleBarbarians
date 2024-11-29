@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using System;
 using System.Collections.Generic;
+using Spectre.Console;
+using Figgle;
 
 namespace BattleBarbarians
 {
@@ -20,6 +22,11 @@ namespace BattleBarbarians
 
         public void StartGame()
         {
+            string text = "BattleBarbarians!";
+            string banner = FiggleFonts.Standard.Render(text);
+
+            // Skriv ut bannern
+            Console.WriteLine(banner);
             Character selectedCharacter = CharacterSelection();
 
             if (selectedCharacter != null)
@@ -35,36 +42,31 @@ namespace BattleBarbarians
 
         private Character CharacterSelection()
         {
-            Console.WriteLine("Välj din karaktär:");
-            Console.WriteLine("1. Dwarf");
-            Console.WriteLine("2. Berserker");
-            Console.WriteLine("3. Warrior");
-
-            int choice = 0;
-
-            while (choice < 1 || choice > 3)
+            // Skapa en lista med karaktärer att välja mellan
+            var characters = new List<Character>
             {
-                Console.Write("Välj en karaktär (1-3): ");
-                string input = Console.ReadLine();
-
-                if (int.TryParse(input, out choice) && choice >= 1 && choice <= 3)
-                {
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Ogiltigt val, försök igen.");
-                }
-            }
-
-            // Skapa rätt karaktär baserat på spelarens val
-            return choice switch
-            {
-                1 => new Dwarf("Dwarf"), 
-                2 => new Berserker("Berserker"),
-                3 => new Warrior("Warrior"), 
-                _ => null
+                new Berserker("Berserker"),
+                new Warrior("Warrior"),
+                new Dwarf("Dwarf")
             };
+
+                // Använd Spectre.Console Selection för att låta spelaren välja en karaktär
+                var selectedCharacter = AnsiConsole
+                    .Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Välj en karaktär:")
+                            .AddChoices("Berserker", "Warrior", "Dwarf")
+                    );
+
+            Character player = selectedCharacter switch
+            {
+                "Berserker" => new Berserker("Berserker"),
+                "Warrior" => new Warrior("Warrior"),
+                "Dwarf" => new Dwarf("Dwarf"),
+                _ => throw new InvalidOperationException("Ogiltigt val")
+            };
+
+            return player;
         }
     }
 }
