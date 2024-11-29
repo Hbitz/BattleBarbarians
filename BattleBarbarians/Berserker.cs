@@ -17,7 +17,7 @@ namespace BattleBarbarians
                   40,   // Mana
                   40,   // Attack power
                   new List<Attack> {
-                      new Attack("Furious Slash", 40, 15, "A brutal slash with a fury boost."),
+                      new Attack("Furious Slash", 20, 5, "A brutal slash with a fury boost."),
                       new Attack("Berserk Charge", 50, 20, "Charge toward your target and strike a vital slash."),
                       new Attack("Raging whirlind", 85, 35, "Consumed by fury, unleash a furious barrage of attacks.")
                   }
@@ -48,6 +48,7 @@ namespace BattleBarbarians
 
             Attack selectedAttack = Attacks[attackChoice];
             Console.WriteLine($"{Name} använder {selectedAttack.Name}!");
+            Mana -= selectedAttack.ManaCost;
             target.TakeDamage(selectedAttack.Damage);
         }
 
