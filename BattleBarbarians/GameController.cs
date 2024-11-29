@@ -22,6 +22,7 @@ namespace BattleBarbarians
 
         public void StartGame()
         {
+            // Skapa bannern med Figgle
             string text = "BattleBarbarians!";
             string banner = FiggleFonts.Standard.Render(text);
 
