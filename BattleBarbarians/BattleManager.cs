@@ -36,47 +36,59 @@ internal class BattleManager
   -|-
   / \
 (Goblin)";
+    private int level = 1;
 
     public void StartBattle(Character player)
     {
-        
-        Character enemy = GenerateRandomEnemy();
+        bool running = true;
+        while (running)
+        {        
+            Character enemy = GenerateRandomEnemy();
 
-        while (player.IsAlive() && enemy.IsAlive())
-        {
-            PrintBattleArtAndInfo(player, enemy);
-
-            player.PerformAttack(enemy);
-
-            if (enemy.IsAlive())
+            while (player.IsAlive() && enemy.IsAlive())
             {
-                enemy.PerformAttack(player);
+                PrintBattleArtAndInfo(player, enemy);
+
+                player.PerformAttack(enemy);
+
+                if (enemy.IsAlive())
+                {
+                    enemy.PerformAttack(player);
+                }
+                player.RecoverMana(5);
+                enemy.RecoverMana(5);
             }
-        }
 
-        // Restore HP/Mana on victroy
-        if (player.IsAlive())
-        {
-            Console.WriteLine($"{player.Name} vinner!");
-            player.Health = player.MaxHealth;  
+            // Restore HP/Mana on victroy
+            if (player.IsAlive())
+            {
+                Console.WriteLine($"{player.Name} vinner!");
+                // Gives player a 50% chance for a reward
+                level++; // Increase level
+                GiveReward(player);
+                player.Health = player.MaxHealth;  
+                player.Mana = player.MaxMana;
 
-            // Gives player a 50% chance for a reward
-            GiveReward(player);
+            }
+            else
+            {
+                Console.WriteLine($"{enemy.Name} vinner!");
+                running = false;
+            }        
         }
-        else
-        {
-            Console.WriteLine($"{enemy.Name} vinner!");
-        }        
     }
 
     public void PrintBattleArtAndInfo(Character player, Character enemy)
     {
         // Clear the console every turn
-        Console.Clear();
+        //Console.Clear();
         // A banner with text-art
         string text = "BattleBarbarians!";
         string banner = FiggleFonts.Standard.Render(text);
+        string levelText = "Level " + level.ToString();
+        string levelBanner = FiggleFonts.Avatar.Render(levelText);
         Console.WriteLine(banner);
+        Console.WriteLine(levelBanner);
 
 
         // Set enemyArt to our current enemy
@@ -145,12 +157,12 @@ internal class BattleManager
             switch (rewardChoice)
             {
                 case 1:
-                    player.MaxHealth += 50;
-                    Console.WriteLine($"{player.Name} får 50 extra HP!");
+                    player.MaxHealth += 10;
+                    Console.WriteLine($"{player.Name} får 10 extra HP!");
                     break;
                 case 2:
-                    player.MaxMana += 20;
-                    Console.WriteLine($"{player.Name} får 20 extra Mana!");
+                    player.MaxMana += 5;
+                    Console.WriteLine($"{player.Name} får 5 extra Mana!");
                     break;
                 case 3:
                     player.AttackPower += 10;
