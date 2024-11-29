@@ -21,9 +21,9 @@ namespace BattleBarbarians
                   50,                // Attack power
                   new List<Attack>
                   {
-                      new Attack("Crushing Blow", 30, 5, "A devastating attack from the brute head."),
-                      new Attack("Fireball", 120, 60, "A fiery magical blast from the cunning head."),
-                      new Attack("Dual Strike", 100, 40, "Both heads attack simultaneously, causing massive damage.")
+                      new Attack("Crushing Blow", 10, 5, "A devastating attack from the brute head."),
+                      new Attack("Fireball", 80, 60, "A fiery magical blast from the cunning head."),
+                      new Attack("Dual Strike", 55, 40, "Both heads attack simultaneously, causing massive damage.")
                   })
         {
             random = new Random();

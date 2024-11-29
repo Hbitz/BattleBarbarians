@@ -49,7 +49,15 @@ namespace BattleBarbarians
             Attack selectedAttack = Attacks[attackChoice];
             Console.WriteLine($"{Name} använder {selectedAttack.Name}!");
             Mana -= selectedAttack.ManaCost;
-            target.TakeDamage(selectedAttack.Damage);
+
+            if (wasInBerserkState)
+            {
+                target.TakeDamage(Convert.ToInt32(selectedAttack.Damage * 1.3));
+            }
+            else
+            {
+                target.TakeDamage(selectedAttack.Damage);
+            }
         }
 
     }

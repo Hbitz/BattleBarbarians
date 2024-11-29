@@ -17,12 +17,12 @@ namespace BattleBarbarians
             : base(
                   "Troll",
                   200, // High health
-                  30,  // Mana
+                  25,  // Mana
                   50,  // Strong base attack power
                   new List<Attack> {
-                      new Attack("Troll Smash", 20, 5, "A devastating smash with the troll's club."),
-                      new Attack("Boulder Throw", 30, 10, "Throws a massive boulder at the enemy."),
-                      new Attack("Crushing Blow", 60, 20, "A slow but incredibly powerful blow.")
+                      new Attack("Troll Smash", 15, 5, "A devastating smash with the troll's club."),
+                      new Attack("Boulder Throw", 25, 10, "Throws a massive boulder at the enemy."),
+                      new Attack("Crushing Blow", 55, 20, "A slow but incredibly powerful blow.")
                   }
             )
         {

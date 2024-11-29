@@ -1,7 +1,9 @@
 ﻿using BattleBarbarians;
 using Figgle;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
@@ -36,14 +38,38 @@ internal class BattleManager
   -|-
   / \
 (Goblin)";
+
+    private readonly string twoHeadedOgreArt = @"
+             /\
+   (_)(_)   /< \>
+   /∞\/∞\  <\ >/>
+  _\ö/\ö/_   ||
+ /  O---O \_/|3
+| /|:::::|\_/||
+| ||~~~~~|   ()
+mm |\___/|
+   ||   ||
+  /_|   |_\";
     private int level = 1;
+    private bool isFinalLevel = false;
 
     public void StartBattle(Character player)
     {
         bool running = true;
+        // Keep running game loop until we reach lvl 20 or player dies
         while (running)
-        {        
+        {
+            // bool is used to run specific code on last level
+            if (level == 20)
+            {
+                isFinalLevel = true; 
+            }
             Character enemy = GenerateRandomEnemy();
+            // If we are on the final level, switch enemy to the final boss
+            if (isFinalLevel == true)
+            {
+                enemy = new TwoHeadedOgre();
+            }
 
             while (player.IsAlive() && enemy.IsAlive())
             {
@@ -63,20 +89,32 @@ internal class BattleManager
             if (player.IsAlive())
             {
                 Console.WriteLine($"{player.Name} vinner!");
-                // Gives player a 50% chance for a reward
-                level++; // Increase level
-                GiveReward(player);
-                player.Health = player.MaxHealth;  
-                player.Mana = player.MaxMana;
+                if (!isFinalLevel)
+                {
+                    level++; // Increase level
+                    // Gives player a 50% chance for a reward
+                    GiveReward(player);
+                    player.Health = player.MaxHealth;  
+                    player.Mana = player.MaxMana;
+                }
+                else
+                {
+                    Console.WriteLine("Wow, you have defeated the final boss!");
+                    Console.WriteLine("This is a tremendous achievement, one of a kind that will go down in history");
+                    Console.WriteLine("TODO - Write/Read JSON and hall of hame");
+                    running = false;
+                }
 
             }
             else
             {
                 Console.WriteLine($"{enemy.Name} vinner!");
                 running = false;
-            }        
+            }
         }
     }
+
+
 
     public void PrintBattleArtAndInfo(Character player, Character enemy)
     {
@@ -100,6 +138,10 @@ internal class BattleManager
         else if (enemy.Name == "Troll")
         {
             enemyArt = trollArt;
+        }
+        else if (enemy.Name == "Two-Headed Ogre")
+        {
+            enemyArt = twoHeadedOgreArt;
         }
 
 
@@ -138,38 +180,40 @@ internal class BattleManager
     private void GiveReward(Character player)
     {
         Random rand = new Random();
-        int rewardChance = rand.Next(1, 101); 
+        int rewardChance = rand.Next(1, 101);
 
-        if (rewardChance <= 50)  
+        if (rewardChance <= 50)
         {
-            Console.WriteLine("Du får en belöning! Välj en:");
-            Console.WriteLine("1. Permanent HP");
-            Console.WriteLine("2. Permanent Mana");
-            Console.WriteLine("3. Permanent Attack Power");
+            Console.WriteLine("Du får en belöning!");
 
-            //int rewardChoice = int.Parse(Console.ReadLine()); 
-            if (!int.TryParse(Console.ReadLine(), out int rewardChoice) || rewardChoice < 1 || rewardChoice > 3)
-            {
-                Console.WriteLine("Ogiltigt val. Försök igen.");
-                return;
-            }
+            // todo - Highlight color?
+            var rewardChoice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Välj en belöning:")
+                    .HighlightStyle(new Style(Color.White, Color.Black))
+                    .AddChoices(
+                    "[green]1. Permanent HP[/]", 
+                    "[blue]2. Permanent Mana[/]",
+                    "[red]3. Permanent Attack Power[/]")
+            );
 
+            // Map the selected choice to a reward
             switch (rewardChoice)
             {
-                case 1:
+                case "[green]1. Permanent HP[/]":
                     player.MaxHealth += 10;
-                    Console.WriteLine($"{player.Name} får 10 extra HP!");
+                    Console.WriteLine($"{player.Name} får 15 extra HP!");
                     break;
-                case 2:
+                case "[blue]2. Permanent Mana[/]":
                     player.MaxMana += 5;
                     Console.WriteLine($"{player.Name} får 5 extra Mana!");
                     break;
-                case 3:
+                case "[red]3. Permanent Attack Power[/]":
                     player.AttackPower += 10;
                     Console.WriteLine($"{player.Name} får 10 extra Attack Power!");
                     break;
                 default:
-                    Console.WriteLine("Ogiltigt val.");
+                    Console.WriteLine("Ogiltigt val."); // This case will rarely be hit due to the controlled selection
                     break;
             }
         }
