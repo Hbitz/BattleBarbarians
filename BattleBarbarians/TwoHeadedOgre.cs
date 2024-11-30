@@ -21,7 +21,7 @@ namespace BattleBarbarians
                   1,                // Attack Power modifier
                   new List<Attack>
                   {
-                      new Attack("Crushing Blow", 10, 5, "A devastating attack from the brute head."),
+                      new Attack("Crushing Blow", 15, 0, "A devastating attack from the brute head."),
                       new Attack("Fireball", 80, 60, "A fiery magical blast from the cunning head."),
                       new Attack("Dual Strike", 55, 40, "Both heads attack simultaneously, causing massive damage.")
                   })

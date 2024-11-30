@@ -20,7 +20,7 @@ namespace BattleBarbarians
                   25,  // Mana
                   1,  // Attack Power modifier
                   new List<Attack> {
-                      new Attack("Troll Smash", 15, 5, "A devastating smash with the troll's club."),
+                      new Attack("Troll Smash", 15, 0, "A devastating smash with the troll's club."),
                       new Attack("Boulder Throw", 25, 10, "Throws a massive boulder at the enemy."),
                       new Attack("Crushing Blow", 55, 20, "A slow but incredibly powerful blow.")
                   }
