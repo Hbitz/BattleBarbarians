@@ -118,9 +118,6 @@ mm |\___/|
 
     public void PrintBattleArtAndInfo(Character player, Character enemy)
     {
-        // Clear the console every turn
-        //Console.Clear();
-        // A banner with text-art
         string text = "BattleBarbarians!";
         string banner = FiggleFonts.Standard.Render(text);
         string levelText = "Level " + level.ToString();

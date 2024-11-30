@@ -66,36 +66,8 @@ namespace BattleBarbarians
                 {
                     validAttack = true;
                 }
-
-
             }
-
-
             return attackChoice;
-
-            //// Läs spelarens val av attack
-            //int attackChoice = 0;
-            //bool validChoice = false;
-
-            //// Läs in spelarens val tills det är ett giltigt val
-            //while (!validChoice)
-            //{
-            //    Console.Write("Välj en attack (1 - {0}): ", Attacks.Count);
-            //    string input = Console.ReadLine();
-
-            //    // Försök att konvertera spelarens input till ett heltal
-            //    if (int.TryParse(input, out attackChoice) && attackChoice >= 1 && attackChoice <= Attacks.Count)
-            //    {
-            //        validChoice = true; // Validerad input
-            //        attackChoice -= 1; // Subtrahera 1 för att matcha indexet i listan
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("Ogiltigt val, försök igen.");
-            //    }
-            //}
-
-            //return attackChoice; // Returvalet för attacken
         }
 
 

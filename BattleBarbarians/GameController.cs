@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using System;
 using System.Collections.Generic;
 using Spectre.Console;
@@ -22,17 +21,15 @@ namespace BattleBarbarians
 
         public void StartGame()
         {
-            // Skapa bannern med Figgle
             string text = "BattleBarbarians!";
             string banner = FiggleFonts.Standard.Render(text);
 
-            // Skriv ut bannern
             Console.WriteLine(banner);
             Character selectedCharacter = CharacterSelection();
 
             if (selectedCharacter != null)
             {
-                Console.WriteLine($"Du valde {selectedCharacter.Name}! Spelet börjar nu!");
+                Console.Clear();
                 battleManager.StartBattle(selectedCharacter);
             }
             else

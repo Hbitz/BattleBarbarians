@@ -8,7 +8,6 @@ namespace BattleBarbarians
 {
     internal class Berserker : Character
     {
-        private double baseAttackPower; // Unique to berserker class
         bool wasInBerserkState = false;
         public Berserker(string name)
             : base(
@@ -23,13 +22,11 @@ namespace BattleBarbarians
                   }
             )
         {
-            baseAttackPower = AttackPower;
+
         }
 
         public override void PerformAttack(Character target)
         {
-            // Reset our base attack power so we don't get a stacking 30% buff every turn
-
             // To add some identity to our berserker, he gets a 30% damage bonus when below half HP
             if (Health < MaxHealth / 2)
             {
@@ -51,7 +48,7 @@ namespace BattleBarbarians
             if (wasInBerserkState)
             {
                 Console.WriteLine("1. " + AttackPower);
-                // Total dmg is base attack * attack power modifier * 30% berserker rage bonus
+                // Total dmg is attack power modifier * attack's damage * 30% berserker rage bonus
                 int totalDmg = Convert.ToInt32(CalculateDamage(AttackPower, selectedAttack) * 1.3);
                 target.TakeDamage(totalDmg);
             }
