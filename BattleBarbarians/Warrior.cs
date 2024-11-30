@@ -14,7 +14,7 @@ namespace BattleBarbarians
                   name, // Player name
                   120,  // HP
                   50,   // Mana
-                  30,   // Attack power
+                  1,   // Attack power modifier
                   new List<Attack> { 
                       new Attack("Slash", 25, 5, "A powerful slashing attack.") 
                   }

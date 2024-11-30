@@ -8,14 +8,14 @@ namespace BattleBarbarians
 {
     internal class Berserker : Character
     {
-        private int baseAttackPower; // Unique to berserker class
+        private double baseAttackPower; // Unique to berserker class
         bool wasInBerserkState = false;
         public Berserker(string name)
             : base(
                   name, // Player name
                   150,  // HP
                   40,   // Mana
-                  40,   // Attack power
+                  1,   // Attack Power modifier
                   new List<Attack> {
                       new Attack("Furious Slash", 20, 5, "A brutal slash with a fury boost."),
                       new Attack("Berserk Charge", 50, 20, "Charge toward your target and strike a vital slash."),
@@ -29,13 +29,11 @@ namespace BattleBarbarians
         public override void PerformAttack(Character target)
         {
             // Reset our base attack power so we don't get a stacking 30% buff every turn
-            AttackPower = baseAttackPower;
 
             // To add some identity to our berserker, he gets a 30% damage bonus when below half HP
             if (Health < MaxHealth / 2)
             {
                 wasInBerserkState = true; // Start tracking our berserk state
-                AttackPower = (int)(AttackPower * 1.3);
                 Console.WriteLine($"{Name} is in a berserk state, increasing damage by 30%!");
             }
             else if (wasInBerserkState && Health > MaxHealth / 2)
@@ -52,11 +50,16 @@ namespace BattleBarbarians
 
             if (wasInBerserkState)
             {
-                target.TakeDamage(Convert.ToInt32(selectedAttack.Damage * 1.3));
+                Console.WriteLine("1. " + AttackPower);
+                // Total dmg is base attack * attack power modifier * 30% berserker rage bonus
+                int totalDmg = Convert.ToInt32(CalculateDamage(AttackPower, selectedAttack) * 1.3);
+                target.TakeDamage(totalDmg);
             }
             else
             {
-                target.TakeDamage(selectedAttack.Damage);
+                Console.WriteLine("2, " + AttackPower);
+                int totalDmg = Convert.ToInt32(CalculateDamage(AttackPower, selectedAttack));
+                target.TakeDamage(totalDmg);
             }
         }
 

@@ -16,7 +16,7 @@ namespace BattleBarbarians
                   name, // Player name
                   100,  // HP
                   45,   // Mana
-                  20,   // Attack power
+                  1,   // Attack Power modifier
                   new List<Attack> {
                       new Attack("Lucky Shot", 20, 5, "A quick shot with a random outcome."),
                       new Attack("Double or Nothing", 50, 20, "A risky double attack with a chance to miss.")
@@ -35,9 +35,9 @@ namespace BattleBarbarians
             target.TakeDamage(selectedAttack.Damage);
         }
 
-        public int LuckyShot(Character target)
+        public double LuckyShot(Character target)
         {
-            int dmg = 0;
+            double dmg = 0;
             int chance = random.Next(1, 101); // Get a number between 1 and 100 for luck
 
             if (chance <= 20) // 20% chance for a critical hit
@@ -61,9 +61,9 @@ namespace BattleBarbarians
         }
 
         // Additional ability: Double or Nothing with high risk and reward
-        public int DoubleOrNothing(Character target)
+        public double DoubleOrNothing(Character target)
         {
-            int dmg = 0;
+            double dmg = 0;
             int chance = random.Next(1, 101); // Random number between 1 and 100
 
             if (chance <= 50) // 50% chance to succeed

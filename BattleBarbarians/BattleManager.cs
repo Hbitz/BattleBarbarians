@@ -201,16 +201,16 @@ mm |\___/|
             switch (rewardChoice)
             {
                 case "[green]1. Permanent HP[/]":
-                    player.MaxHealth += 10;
-                    Console.WriteLine($"{player.Name} får 15 extra HP!");
+                    player.MaxHealth += 20;
+                    Console.WriteLine($"{player.Name} får 20 extra HP!");
                     break;
                 case "[blue]2. Permanent Mana[/]":
-                    player.MaxMana += 5;
-                    Console.WriteLine($"{player.Name} får 5 extra Mana!");
+                    player.MaxMana += 10;
+                    Console.WriteLine($"{player.Name} får 10 extra Mana!");
                     break;
                 case "[red]3. Permanent Attack Power[/]":
-                    player.AttackPower += 10;
-                    Console.WriteLine($"{player.Name} får 10 extra Attack Power!");
+                    player.AttackPower += 0.1;
+                    Console.WriteLine($"{player.Name} får 10% extra Attack Power!");
                     break;
                 default:
                     Console.WriteLine("Ogiltigt val."); // This case will rarely be hit due to the controlled selection

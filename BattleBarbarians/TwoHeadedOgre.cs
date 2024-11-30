@@ -18,7 +18,7 @@ namespace BattleBarbarians
                   "Two-Headed Ogre", // Boss name
                   500,               // HP
                   100,               // Mana
-                  50,                // Attack power
+                  1,                // Attack Power modifier
                   new List<Attack>
                   {
                       new Attack("Crushing Blow", 10, 5, "A devastating attack from the brute head."),

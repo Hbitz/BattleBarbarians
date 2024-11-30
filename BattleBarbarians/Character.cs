@@ -15,16 +15,21 @@ namespace BattleBarbarians
         public int MaxHealth { get; set; }
         public int Mana { get; set; }
         public int MaxMana { get; set; }
-        public int AttackPower { get; set; }
+        public double AttackPower { get; set; }
         public List<Attack> Attacks { get; set; } // Generic lista with attacks
 
-        public Character(string name, int health, int mana, int attackPower, List<Attack> attacks)
+        public Character(string name, int health, int mana, double attackPower, List<Attack> attacks)
         {
             Name = name;
             Health = MaxHealth = health;
             Mana = MaxMana = mana;
             AttackPower = attackPower;
             Attacks = attacks ?? new List<Attack>();
+        }
+
+        public double CalculateDamage(double attackPower, Attack attack)
+        {
+            return Convert.ToInt32(attackPower * attack.Damage);
         }
 
         public abstract void PerformAttack(Character target);
@@ -35,7 +40,7 @@ namespace BattleBarbarians
             var choices = new List<string>();
             for (int i = 0; i < Attacks.Count; i++)
             {
-                choices.Add($"{Attacks[i].Name} Skada: {Attacks[i].Damage}, manacost: {Attacks[i].ManaCost}");
+                choices.Add($"{Attacks[i].Name} Skada: {CalculateDamage(AttackPower, Attacks[i])}, manacost: {Attacks[i].ManaCost}");
             }
 
             int attackChoice = 0; // Temporarily empty

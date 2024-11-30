@@ -17,7 +17,7 @@ namespace BattleBarbarians
                   "Giant rat", // Fiendens namn
                   130,   // HP
                   0,    // No mana
-                  30,   // Attack power
+                  1,   // Attack Power modifier
                   new List<Attack>
                   {
                       new Attack("Bite", 15, 0, "A quick bite with sharp teeth.")
@@ -28,8 +28,9 @@ namespace BattleBarbarians
 
         public override void PerformAttack(Character target)
         {
-            Console.WriteLine($"{Name} attacks {target.Name} with Bite, causing {AttackPower} damage.");
-            target.Health -= AttackPower;
+            Attack selectedAttack = Attacks[0];
+            Console.WriteLine($"{Name} attacks {target.Name} with Bite, causing {selectedAttack.Damage} damage.");
+            target.Health -= selectedAttack.Damage;
         }
     }
 }

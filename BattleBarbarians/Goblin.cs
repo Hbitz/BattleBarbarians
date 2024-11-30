@@ -18,7 +18,7 @@ namespace BattleBarbarians
                   "Goblin", // Enemy name
                   80,   // HP
                   30,   // Mana
-                  15,   // Attack power
+                  1,   // Attack Power modifier
                   new List<Attack> {
                       new Attack("Sneaky Stab", 15, 5, "A quick and sneaky stab."),
                       new Attack("Goblin Smash", 30, 20, "A wild and reckless smash with high damage.")

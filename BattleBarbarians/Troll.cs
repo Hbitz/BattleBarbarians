@@ -18,7 +18,7 @@ namespace BattleBarbarians
                   "Troll",
                   200, // High health
                   25,  // Mana
-                  50,  // Strong base attack power
+                  1,  // Attack Power modifier
                   new List<Attack> {
                       new Attack("Troll Smash", 15, 5, "A devastating smash with the troll's club."),
                       new Attack("Boulder Throw", 25, 10, "Throws a massive boulder at the enemy."),
@@ -41,10 +41,11 @@ namespace BattleBarbarians
             }
             else
             {
+                Attack baseAttack = Attacks[0];
                 // Fallback to basic attack if not enough mana
                 Console.WriteLine($"{Name} tries to use {chosenAttack.Name} but doesn't have enough mana!");
-                Console.WriteLine($"{Name} instead swings its club at {target.Name}, dealing {AttackPower} damage.");
-                target.TakeDamage(AttackPower);
+                Console.WriteLine($"{Name} instead swings its club at {target.Name}, dealing {baseAttack.Damage} damage.");
+                target.TakeDamage(baseAttack.Damage);
             }
         }
     }
