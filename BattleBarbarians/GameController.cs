@@ -25,6 +25,7 @@ namespace BattleBarbarians
             string banner = FiggleFonts.Standard.Render(text);
 
             Console.WriteLine(banner);
+            ShowGameInfo();
             Character selectedCharacter = CharacterSelection();
 
             if (selectedCharacter != null)
@@ -36,6 +37,19 @@ namespace BattleBarbarians
             {
                 Console.WriteLine("Ogiltigt val, försök igen.");
             }
+        }
+
+        public void ShowGameInfo()
+        {
+            Console.WriteLine("Hello and welcome to the game BattleBarbarians!");
+            Console.WriteLine("This game is an action-rpg with turn based combat.");
+            Console.WriteLine("The goal of the game is to defeat enemies, grow stronger and attain freedom by beating the boss on level 20.");
+            Console.WriteLine();
+            Console.WriteLine("There are three playable characters:");
+            Console.WriteLine("\tBerserker - A fierce commander with multiple attacks and offensive capabilities");
+            Console.WriteLine("\tWarrior - A standard fighter with good balance between offense and defense");
+            Console.WriteLine("\tDwarf - A curageous but weak fighter which relies on luck. This if meant for hardcore players.");
+
         }
 
         private Character CharacterSelection()
