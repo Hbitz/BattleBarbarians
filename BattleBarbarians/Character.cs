@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Spectre.Console;
 
 namespace BattleBarbarians
 {
-    internal abstract class Character<T> where T : Attack
+    internal abstract class Character
     {
         // Properties
         public string Name { get; set; }
@@ -14,31 +15,61 @@ namespace BattleBarbarians
         public int MaxHealth { get; set; }
         public int Mana { get; set; }
         public int MaxMana { get; set; }
-        public int AttackPower { get; set; }
-        public List<T> Attacks { get; set; } // Generic lista with attacks
+        public double AttackPower { get; set; }
+        public List<Attack> Attacks { get; set; } // Generic lista with attacks
 
-        public Character(string name, int health, int mana, int attackPower, List<T> attacks)
+        public Character(string name, int health, int mana, double attackPower, List<Attack> attacks)
         {
             Name = name;
             Health = MaxHealth = health;
             Mana = MaxMana = mana;
             AttackPower = attackPower;
-            Attacks = attacks ?? new List<T>();
+            Attacks = attacks ?? new List<Attack>();
         }
 
-        public virtual void PerformAttack(Character<T> target, T attack)
+        public double CalculateDamage(double attackPower, Attack attack)
         {
-            if (Mana >= attack.ManaCost)
-            {
-                Mana -= attack.ManaCost;
-                target.TakeDamage(attack.Damage);
-                Console.WriteLine($"{Name} used {attack.Name} on {target.Name} for {attack.Damage} damage!");
-            }
-            else
-            {
-                Console.WriteLine($"{Name} tried to use {attack.Name}, but didn't have enough Mana!");
-            }
+            return Convert.ToInt32(attackPower * attack.Damage);
         }
+
+        public abstract void PerformAttack(Character target);
+
+        // Todo - validation
+        public int ChooseAttack()
+        {
+            var choices = new List<string>();
+            for (int i = 0; i < Attacks.Count; i++)
+            {
+                choices.Add($"{Attacks[i].Name} Skada: {CalculateDamage(AttackPower, Attacks[i])}, manacost: {Attacks[i].ManaCost}");
+            }
+
+            int attackChoice = 0; // Temporarily empty
+
+            // Validaiton to ensure you can only select an attack you have enough mana for.
+            bool validAttack = false;
+            while (validAttack == false)
+            {
+
+                string selectedAttack = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                    .Title($"{Name}, Välj en attack:")
+                    .AddChoices(choices)
+                    .HighlightStyle(new Style(foreground: Color.Red))
+                );
+                attackChoice = choices.IndexOf(selectedAttack);
+
+                if (Mana < Attacks[attackChoice].ManaCost)
+                {
+                    Console.WriteLine("You don't have enough mana to use that attack");
+                }
+                else
+                {
+                    validAttack = true;
+                }
+            }
+            return attackChoice;
+        }
+
 
         public void TakeDamage(int damage)
         {
