@@ -12,11 +12,11 @@ namespace BattleBarbarians
         public Warrior(string name) 
             : base(
                   name, // Player name
-                  120,  // HP
+                  200,  // HP
                   50,   // Mana
                   1,   // Attack power modifier
                   new List<Attack> { 
-                      new Attack("Slash", 25, 0, "A powerful slashing attack.") 
+                      new Attack("Slash", 30, 0, "A powerful slashing attack.") 
                   }
               )
         {
@@ -28,8 +28,9 @@ namespace BattleBarbarians
             int attackChoice = ChooseAttack();
 
             Attack selectedAttack = Attacks[attackChoice];
-            Console.WriteLine($"{Name} attacks {target.Name} with {selectedAttack.Name}, causing {AttackPower} damage.");
-            target.TakeDamage(selectedAttack.Damage);
+            int totalDmg = Convert.ToInt32(CalculateDamage(AttackPower, selectedAttack));
+            Console.WriteLine($"{Name} attacks {target.Name} with {selectedAttack.Name}, causing {totalDmg} damage.");
+            target.TakeDamage(totalDmg);
         }
     }
 }
