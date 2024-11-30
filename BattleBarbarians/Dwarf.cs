@@ -29,47 +29,81 @@ namespace BattleBarbarians
         public override void PerformAttack(Character target)
         {
             int attackChoice = ChooseAttack();
-
             Attack selectedAttack = Attacks[attackChoice];
-            Console.WriteLine($"{Name} använder {selectedAttack.Name}!");
-            target.TakeDamage(selectedAttack.Damage);
+
+            int totalDmg = (int)ResolveAttack(selectedAttack.Name, target);
+            Mana -= selectedAttack.ManaCost;
+            target.TakeDamage(totalDmg);
+
         }
+
+        private double ResolveAttack(string attackName, Character target)
+        {
+            switch (attackName)
+            {
+                case "Lucky Shot":
+                    return LuckyShot(target);
+                case "Double or Nothing":
+                    return DoubleOrNothing(target);
+                default:
+                    return LuckyShot(target); // Fallback för okända attacker
+            }
+        }
+
 
         public double LuckyShot(Character target)
         {
+            Attack luckyShot = Attacks[0];
             double dmg = 0;
             int chance = random.Next(1, 101); // Get a number between 1 and 100 for luck
+            string attackStatus = "normal";
+            string attackInfo = "";
+
 
             if (chance <= 20) // 20% chance for a critical hit
             {
-                int criticalDamage = (int)(AttackPower * 2); // Double damage on critical hit
-                Console.WriteLine($"{Name} lands a critical hit with Lucky Shot, causing {criticalDamage} damage!");
-                dmg = criticalDamage;
+                attackStatus = "crit";
+                dmg = (int)(CalculateDamage(AttackPower, luckyShot) * 2);
             }
             else if (chance <= 60) // 40% chance for a normal hit
             {
-                Console.WriteLine($"{Name} attacks {target.Name} with Lucky Shot, causing {AttackPower} damage.");
-                dmg = AttackPower;
+                dmg = (int)(CalculateDamage(AttackPower, luckyShot));
             }
             else // 40% chance for a low damage attack
             {
-                int lowDamage = (int)(AttackPower * 0.5); // Half damage
-                Console.WriteLine($"{Name} attacks {target.Name} with Lucky Shot, but {Name} is too drunk the shot only grazes his target and causes {lowDamage} damage.");
-                dmg = lowDamage;
+                attackStatus = "low";
+                dmg = (int)(CalculateDamage(AttackPower, luckyShot) * 0.5); // Half damage
             }
+
+
+            switch (attackStatus)
+            {
+                case "normal":
+                    attackInfo = $"{Name} attacks {target.Name} with Lucky Shot, causing {dmg} damage!";
+                    break;
+                case "crit":
+                    attackInfo = $"{Name} lands a critical hit with Lucky Shot, causing {dmg} damage!";
+                    break;
+                case "low":
+                    attackInfo = $"{Name} attacks {target.Name} with Lucky Shot, but {Name} is too drunk and the shot only grazes his target causing {dmg} damage.";
+                    break;
+            }
+
+            Console.WriteLine(attackInfo);
             return dmg;
         }
 
         // Additional ability: Double or Nothing with high risk and reward
         public double DoubleOrNothing(Character target)
         {
+            Attack attack = Attacks[1];
             double dmg = 0;
             int chance = random.Next(1, 101); // Random number between 1 and 100
 
             if (chance <= 50) // 50% chance to succeed
             {
-                Console.WriteLine($"{Name} hits {target.Name} with a double strike, dealing {AttackPower * 2} damage!");
-                dmg = AttackPower * 2;
+                dmg = (int)(CalculateDamage(AttackPower, attack) * 2);
+                Console.WriteLine($"{Name} hits {target.Name} with a double strike, dealing {dmg} damage!");
             }
             else
             {
