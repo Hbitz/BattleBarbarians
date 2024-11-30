@@ -38,7 +38,9 @@ namespace BattleBarbarians
             {
                 Console.WriteLine($"{Name} doesn't have enough mana for {chosenAttack.Name} and defaults to Sneaky Stab!");
                 // Fallback to default
-                chosenAttack = Attacks.Find(a => a.Name == "Sneaky Stab");
+                chosenAttack = Attacks[0];
+                Console.WriteLine($"{Name} uses {chosenAttack.Name} on {target.Name}, dealing {chosenAttack.Damage} damage!");
+                target.TakeDamage(chosenAttack.Damage);
             }
 
             else
