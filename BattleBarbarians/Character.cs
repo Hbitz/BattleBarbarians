@@ -17,6 +17,8 @@ namespace BattleBarbarians
         public int MaxMana { get; set; }
         public double AttackPower { get; set; }
         public List<Attack> Attacks { get; set; } // Generic lista with attacks
+        // Because Inventory logic could be extensive and because it's not needed by all characters(rat, troll, etc), we create a InventoryManager class.
+        public CharacterInventory Inventory { get; set; }
 
         public Character(string name, int health, int mana, double attackPower, List<Attack> attacks)
         {
@@ -25,6 +27,7 @@ namespace BattleBarbarians
             Mana = MaxMana = mana;
             AttackPower = attackPower;
             Attacks = attacks ?? new List<Attack>();
+            Inventory = new CharacterInventory(); 
         }
 
         public double CalculateDamage(double attackPower, Attack attack)
@@ -70,6 +73,39 @@ namespace BattleBarbarians
             return attackChoice;
         }
 
+        public void ChooseItem()
+        {
+            var choices = new List<string>();
+            if (Inventory.IsEmpty())
+            {
+                Console.WriteLine("Inventory empty");
+                return;
+            }
+
+            var items = Inventory.GetAllItems();
+
+            // Skapa en lista av föremål för Spectre.Console-prompten
+            var itemNames = items.Select(item => $"{item.Key.Name} ({item.Value})").ToList();
+            
+            // Använd SelectionPrompt från Spectre.Console för att låta användaren välja ett föremål
+            var chosenItemName = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[yellow]Choose an item to use:[/]")
+                    .PageSize(10) // Antalet alternativ som visas samtidigt
+                    .AddChoices(itemNames)
+            );
+
+            // Hitta föremålet användaren valde
+            var chosenItem = items.FirstOrDefault(item =>
+                $"{item.Key.Name} ({item.Value})" == chosenItemName).Key;
+
+            // Kontrollera om ett föremål har valts
+            if (chosenItem != null)
+            {
+                Inventory.UseItem(chosenItem, this);
+            }
+        }
+
 
         public void TakeDamage(int damage)
         {
@@ -93,6 +129,15 @@ namespace BattleBarbarians
         public override string ToString()
         {
             return $"{Name} - HP: {Health}/{MaxHealth}, Mana: {Mana}/{MaxMana}, Attack Power: {AttackPower}";
+        }
+
+        public virtual void ShowInventory()
+        {
+            Inventory.ShowInventory();
+        }
+        public virtual void GetInventoryChoices()
+        {
+
         }
     }
 }
