@@ -54,7 +54,6 @@ namespace BattleBarbarians
             // Below we'll create a meny of attacks and item usages using Spectre.Console selection.
             // We use a boolean to track if an action is performed. Unless they attempt to seelct an attack they don't have mana for, all actions will set actionPerformed to true
 
-
             bool actionPerformed = false; 
             while (!actionPerformed)
             {
@@ -94,8 +93,11 @@ namespace BattleBarbarians
                 foreach (var item in Inventory.GetAllItems())
                 {
                     string description = $"{item.Key.Name} x{item.Value}";
-                    promptChoices[description] = () => HandleItem(item.Key);
-                    actionPerformed = true; 
+                    promptChoices[description] = () =>
+                    {
+                        HandleItem(item.Key);
+                        actionPerformed = true;
+                    };
                 }
 
                 // Present the menu to player
@@ -111,160 +113,8 @@ namespace BattleBarbarians
             }
         }
 
-
-        //public void PerformAttackOld(Character target)
-        //{
-        //    // To add some identity to our berserker, he gets a 30% damage bonus when below half HP
-        //    if (Health < MaxHealth / 2)
-        //    {
-        //        wasInBerserkState = true; // Start tracking our berserk state
-        //        Console.WriteLine($"{Name} is in a berserk state, increasing damage by 30%!");
-        //    }
-        //    else if (wasInBerserkState && Health > MaxHealth / 2)
-        //    {
-        //        wasInBerserkState = false;
-        //        Console.WriteLine($"{Name} is no longer in berserk state.");
-        //    }
-
-
-        //    // Skapa val för attacker och föremål
-        //    var attackOptions = new Dictionary<Attack, bool>();
-        //    foreach (var attack in Attacks)
-        //    {
-        //        bool isAvailable = Mana >= attack.ManaCost;
-        //        attackOptions[attack] = isAvailable;
-        //    }
-
-        //    // Bygg menyer för attacker och föremål
-        //    var promptChoices = new Dictionary<string, Action>();
-        //    foreach (var option in attackOptions)
-        //    {
-        //        string description = option.Value
-        //            ? $"{option.Key.Name} - Damage: {CalculateDamage(AttackPower, option.Key)}, Mana Cost: {option.Key.ManaCost}"
-        //            : $"{option.Key.Name} - Damage: {CalculateDamage(AttackPower, option.Key)}, Mana Cost: {option.Key.ManaCost} [Not enough mana]";
-
-        //        // Lägg till handling för attack
-        //        promptChoices[description] = () =>
-        //        {
-        //            if (option.Value) HandleAttack(option.Key, target);
-        //            else Console.WriteLine("[red]You cannot use this attack right now![/]");
-        //        };
-        //    }
-
-        //    var itemOptions = new Dictionary<Item, bool>();
-        //    foreach (var item in Inventory.GetAllItems())
-        //    {
-        //        itemOptions[item.Key] = true; // Alla föremål är tillgängliga
-        //    }
-
-        //    foreach (var option in itemOptions)
-        //    {
-        //        string description = $"{option.Key.Name} x{Inventory.GetItemCount(option.Key)}";
-        //        promptChoices[description] = () => HandleItem(option.Key);
-        //    }
-
-        //    // Prompt för att välja handling
-        //    string selectedAction = AnsiConsole.Prompt(
-        //        new SelectionPrompt<string>()
-        //            .Title("[yellow]What do you want to do?[/]")
-        //            .PageSize(10)
-        //            .AddChoices(promptChoices.Keys));
-
-        //    // Utför vald handling
-        //    promptChoices[selectedAction]();
-
-
-        //    //var actionOptions = new Dictionary<string, bool>();
-        //    //var attackOptions = new Dictionary<Attack, bool>();
-
-        //    //foreach (var attack in Attacks)
-        //    //{                
-
-        //    //    string actionText = $"Attack: {attack.Name} - Damage: {CalculateDamage(AttackPower, attack)}, Mana Cost: {attack.ManaCost})";
-        //    //    // This validation allows us to display options for all attacks, but only accept the input where we have enough mana.
-        //    //       bool isAvailable = Mana >= attack.ManaCost;
-        //    //    if (!isAvailable)
-        //    //    {
-        //    //        actionText += Markup.Escape(" [Not enough mana]");
-        //    //    }
-        //    //    actionOptions[actionText] = isAvailable;
-        //    //}
-
-        //    //foreach (var item in Inventory.GetAllItems())
-        //    //{
-        //    //    string actionText = $"Item: {item.Key.Name} x{item.Value}";
-        //    //    actionOptions[actionText] = true; // Alla föremål är tillgängliga
-        //    //}
-
-        //    //// Konvertera alternativen till en lista för SelectionPrompt
-        //    //var promptChoices = actionOptions.Keys.ToList();
-
-        //    string selectedAction = "";
-        //    do
-        //    {
-        //        selectedAction = AnsiConsole.Prompt(
-        //            new SelectionPrompt<string>()
-        //                .Title("[yellow]What do you want to do?[/]")
-        //                .PageSize(10)
-        //                .AddChoices(promptChoices));
-
-        //        // As even disabled options are shown, control that the selectedAction is a enabled option
-        //        if (!actionOptions[selectedAction])
-        //        {
-        //            AnsiConsole.MarkupLine("[red]You cannot select this option![/]");
-        //        }
-
-        //    } while (!actionOptions[selectedAction]); // Repetera tills användaren väljer ett giltigt val
-
-
-        //    if (selectedAction.StartsWith("Attack:"))
-        //    {
-        //        HandleAttack(selectedAction, target);
-        //    }
-        //    else if (selectedAction.StartsWith("Item:"))
-        //    {
-        //        HandleItem(selectedAction);
-        //    }
-        //}
-
         private void HandleAttack(Attack attack, Character target)
         {
-            if (Mana < attack.ManaCost)
-            {
-                Console.WriteLine("[red]You don't have enough mana for this attack.[/]");
-                return;
-            }
-
-            Console.WriteLine($"{Name} uses {attack.Name}!");
-            Mana -= attack.ManaCost;
-
-            int totalDmg = Health < MaxHealth / 2
-                ? Convert.ToInt32(CalculateDamage(AttackPower, attack) * 1.3)
-                : Convert.ToInt32(CalculateDamage(AttackPower, attack));
-
-            target.TakeDamage(totalDmg);
-        }
-
-        private void HandleItem(Item item)
-        {
-            Console.WriteLine($"{Name} uses {item.Name}!");
-            Inventory.UseItem(item, this);
-        }
-
-
-
-        private void HandleAttackOld(string action, Character target)
-        {
-            // Todo - Are there any better alternatives to getting the attack?
-            string attackName = action.Substring(8).Split('-')[0].Trim();
-            var attack = Attacks.First(a => a.Name == attackName);
-            
-            if (Mana < attack.ManaCost)
-            {
-                Console.WriteLine("[red]You don't have enough mana for this attack.[/]");
-                return;
-            }
-
             Console.WriteLine($"{Name} uses {attack.Name}!");
             Mana -= attack.ManaCost;
 
@@ -275,12 +125,9 @@ namespace BattleBarbarians
             target.TakeDamage(totalDmg);
         }
 
-        private void HandleItemOld(string action)
+        private void HandleItem(Item item)
         {
-            // Get the item name and use it
-            string itemName = action.Substring(5).Split('x')[0].Trim();
-            var item = Inventory.GetAllItems().Keys.First(i => i.Name == itemName);
-
+            Console.WriteLine($"{Name} uses {item.Name}!");
             Inventory.UseItem(item, this);
         }
     }
