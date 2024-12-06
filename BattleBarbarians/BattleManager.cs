@@ -76,7 +76,7 @@ mm |\___/|
                 PrintBattleArtAndInfo(player, enemy);
                 player.ShowInventory();
 
-                player.PerformAttack(enemy);
+                player.PerformAttack2(enemy);
 
                 if (enemy.IsAlive())
                 {

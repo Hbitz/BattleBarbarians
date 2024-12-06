@@ -22,7 +22,12 @@ namespace BattleBarbarians
         {
             
         }
+        protected override void ApplySpecialMechanics()
+        {
+            // Implement special mechanics
+        }
 
+        // Old method of choosing attacks, no longer used
         public override void PerformAttack(Character target)
         {
             int attackChoice = ChooseAttack();
