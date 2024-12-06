@@ -58,7 +58,7 @@ namespace BattleBarbarians
                 {
                     string description = option.Value
                         ? $"{option.Key.Name} - Damage: {CalculateDamageNew(option.Key)}, Mana: {option.Key.ManaCost}"
-                        : $"{option.Key.Name} - Damage: {CalculateDamage(AttackPower, option.Key)}, Mana Cost: {option.Key.ManaCost}" + Markup.Escape("[Not enough mana]");
+                        : $"{option.Key.Name} - Damage: {CalculateDamageNew(option.Key)}, Mana: {option.Key.ManaCost}" + Markup.Escape("[Not enough mana]");
                     promptChoices[description] = () =>
                     {
                         if (option.Value)
