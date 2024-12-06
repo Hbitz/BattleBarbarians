@@ -13,6 +13,7 @@ namespace BattleBarbarians
     internal class GameController
     {
         private BattleManager battleManager;
+        private HallOfFameManager hallOfFameManager = new HallOfFameManager();
 
         public GameController()
         {
@@ -25,17 +26,40 @@ namespace BattleBarbarians
             string banner = FiggleFonts.Standard.Render(text);
 
             Console.WriteLine(banner);
-            ShowGameInfo();
-            Character selectedCharacter = CharacterSelection();
 
-            if (selectedCharacter != null)
+            while (true)
             {
-                Console.Clear();
-                battleManager.StartBattle(selectedCharacter);
-            }
-            else
-            {
-                Console.WriteLine("Ogiltigt val, försök igen.");
+                // Main menu with options
+                var selection = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("What would you like to do?")
+                        .AddChoices("Show information", "Start game", "View Hall of Fame", "Exit")
+                );
+
+                switch (selection)
+                {
+                    case "information":
+                        ShowGameInfo();
+                        break;
+                    case "View Hall of Fame":
+                        hallOfFameManager.PrintHallOfFame();
+                        break;
+                    case "Start game":
+                        Character selectedCharacter = CharacterSelection();
+                        if (selectedCharacter != null)
+                        {
+                            Console.Clear();
+                            battleManager.StartBattle(selectedCharacter);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No character selected. Try again.");
+                        }
+                        break;
+                    case "Exit":
+                        Console.WriteLine("Tack för att du spelade BattleBarbarians!");
+                        return;
+                }
             }
         }
 
@@ -66,7 +90,7 @@ namespace BattleBarbarians
                 var selectedCharacter = AnsiConsole
                     .Prompt(
                         new SelectionPrompt<string>()
-                            .Title("Välj en karaktär:")
+                            .Title("Select your character:")
                             .AddChoices("Berserker", "Warrior", "Dwarf")
                     );
 
@@ -75,7 +99,7 @@ namespace BattleBarbarians
                 "Berserker" => new Berserker("Berserker"),
                 "Warrior" => new Warrior("Warrior"),
                 "Dwarf" => new Dwarf("Dwarf"),
-                _ => throw new InvalidOperationException("Ogiltigt val")
+                _ => throw new InvalidOperationException("Choice not allowed. Try again.")
             };
 
             return player;
