@@ -211,10 +211,6 @@ namespace BattleBarbarians
         {
             Inventory.ShowInventory();
         }
-        public virtual void GetInventoryChoices()
-        {
-
-        }
 
         public virtual void HandleAttack(Attack attack, Character target)
         {

@@ -9,7 +9,6 @@ namespace BattleBarbarians
     internal class CharacterInventory
     {
         private Dictionary<Item, int> _items;
-        //private List<Item> _items;
 
         public CharacterInventory()
         {
@@ -29,7 +28,6 @@ namespace BattleBarbarians
             Console.WriteLine($"{item.Name} added to inventory.");
         }
 
-        // Visa föremålen i inventariet
         public void ShowInventory()
         {
             Console.WriteLine("Inventory:");
@@ -42,7 +40,6 @@ namespace BattleBarbarians
         public Dictionary<Item, int> GetAllItems()
         {
             return _items;
-            //return new Dictionary<Item, int>(_items); // Return a copy of inventory
         }
 
         public bool IsEmpty()
@@ -67,21 +64,5 @@ namespace BattleBarbarians
                 Console.WriteLine($"You don't have {item.Name} in your inventory");
             }
         }
-
-        //// Använd ett föremål från inventariet
-        //public void UseItem(Item item, Character target)
-        //{
-        //    if (_items.Contains(item))
-        //    {
-        //        _items.Remove(item);
-        //        item.Use(target);
-        //        Console.WriteLine($"{item.Name} has been used.");
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine($"{item.Name} is not in the inventory.");
-        //    }
-        //}
-
     }
 }

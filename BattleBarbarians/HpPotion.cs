@@ -9,12 +9,6 @@ namespace BattleBarbarians
     internal class HpPotion : Item
     {
         public int HealAmount { get; set; }
-
-        //public HpPotion(string name, string description, int healAmount)
-        //    : base(name, description)
-        //{
-        //    HealAmount = healAmount;
-        //}
         public HpPotion(string name, string description)
            : base(name, description)
         {
