@@ -25,7 +25,10 @@ namespace BattleBarbarians
             )
         {
         }
-
+        protected override void ApplySpecialMechanics()
+        {
+            // Implement special mechanics
+        }
         public override void PerformAttack(Character target)
         {
             Attack selectedAttack = Attacks[0];

@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Spectre.Console;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace BattleBarbarians
 {
     internal class Berserker : Character
-    {
-        bool wasInBerserkState = false;
+    {    
+        private bool IsInBerserkState { get; set; } = false;
         public Berserker(string name)
             : base(
                   name, // Player name
@@ -25,41 +27,47 @@ namespace BattleBarbarians
 
         }
 
-        public override void PerformAttack(Character target)
+        public void UseHpPotion(Item healthPotion)
         {
-            // To add some identity to our berserker, he gets a 30% damage bonus when below half HP
-            if (Health < MaxHealth / 2)
-            {
-                wasInBerserkState = true; // Start tracking our berserk state
-                Console.WriteLine($"{Name} is in a berserk state, increasing damage by 30%!");
-            }
-            else if (wasInBerserkState && Health > MaxHealth / 2)
-            {
-                wasInBerserkState = false;
-                Console.WriteLine($"{Name} is no longer in berserk state.");
-            }
+            Inventory.UseItem(healthPotion, this);
+        }
 
-            int attackChoice = ChooseAttack();
+        public void UseMpPotion(Item manaPotion)
+        {
+            Inventory.UseItem(manaPotion, this);
+        }
 
-            Attack selectedAttack = Attacks[attackChoice];
-            Console.WriteLine($"{Name} använder {selectedAttack.Name}!");
-            Mana -= selectedAttack.ManaCost;
-
-            if (wasInBerserkState)
+        // Introduce special-mechanick and behaviors of Berserker-class
+        protected override void ApplySpecialMechanics()
+        {
+            if (Health < MaxHealth / 2 && !IsInBerserkState) // When you first enter berserker state
             {
-                Console.WriteLine("1. " + AttackPower);
-                // Total dmg is attack power modifier * attack's damage * 30% berserker rage bonus
-                int totalDmg = Convert.ToInt32(CalculateDamage(AttackPower, selectedAttack) * 1.3);
-                target.TakeDamage(totalDmg);
+                Console.WriteLine($"{Name} enters a Berserk State, gaining 30% bonus damage!");
+                IsInBerserkState = true;
+
             }
-            else
+            else if (Health >= MaxHealth / 2 && IsInBerserkState == true) // When you exit
             {
-                Console.WriteLine("2, " + AttackPower);
-                int totalDmg = Convert.ToInt32(CalculateDamage(AttackPower, selectedAttack));
-                target.TakeDamage(totalDmg);
+                Console.WriteLine($"{Name} calms down and exits Berserk State.");
+                IsInBerserkState = false;
+            }
+            else if (IsInBerserkState == true) // When you are in berserker state
+            {
+                Console.WriteLine($"{Name} is in a Berserk State, gaining 30% bonus damage!");
             }
         }
 
+        protected override int CalculateDamageNew(Attack attack)
+        {
+            int baseDamage = base.CalculateDamageNew(attack);
+            return IsInBerserkState ? (int)(baseDamage * 1.3) : baseDamage;
+        }
+
+        // Old function, no longer used
+        public override void PerformAttack(Character target)
+        {
+            Console.WriteLine("PerformAttack not implemeneted");
+        }
     }
 }
 

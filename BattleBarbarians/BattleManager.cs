@@ -74,8 +74,9 @@ mm |\___/|
             while (player.IsAlive() && enemy.IsAlive())
             {
                 PrintBattleArtAndInfo(player, enemy);
+                player.ShowInventory();
 
-                player.PerformAttack(enemy);
+                player.PerformAttack2(enemy);
 
                 if (enemy.IsAlive())
                 {
@@ -179,7 +180,7 @@ mm |\___/|
         Random rand = new Random();
         int rewardChance = rand.Next(1, 101);
 
-        if (rewardChance <= 50)
+        if (rewardChance <= 95)
         {
             Console.WriteLine("Du får en belöning!");
 
@@ -191,7 +192,11 @@ mm |\___/|
                     .AddChoices(
                     "[green]1. Permanent HP[/]", 
                     "[blue]2. Permanent Mana[/]",
-                    "[red]3. Permanent Attack Power[/]")
+                    "[red]3. Permanent Attack Power[/]",
+                    "[red]4. Hp potion[/]",
+                    "[blue]5. Mana potion[/]"
+                    //"[white]6. Escape Scroll - Flee from one battle[/]"
+                    )
             );
 
             // Map the selected choice to a reward
@@ -209,6 +214,18 @@ mm |\___/|
                     player.AttackPower += 0.1;
                     Console.WriteLine($"{player.Name} får 10% extra Attack Power!");
                     break;
+
+                case "[red]4. Hp potion[/]":
+                    player.Inventory.AddItem(new HpPotion("Health Potion", "Restores 50hp"));
+                    break;
+                case "[blue]5. Mana potion[/]":
+                    player.Inventory.AddItem(new ManaPotion("Mana Potion", "Restores 35mp"));
+                    break;
+                //case ""[white]6. Escape Scroll - Flee from one battle[/]":":
+                //    player.Inventory.AddItem(new Item("Escape Scroll", "Flee from one battle", (Character target) => target.Health += 50));
+                //    break;
+
+
                 default:
                     Console.WriteLine("Ogiltigt val."); // This case will rarely be hit due to the controlled selection
                     break;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,16 +26,27 @@ namespace BattleBarbarians
         {
             random = new Random();
         }
+        protected override void ApplySpecialMechanics()
+        {
+            // Implement special mechanics, if needed
+        }
 
+        // Old way of attacking. Playable characters no longer use PerformAttack
         public override void PerformAttack(Character target)
         {
-            int attackChoice = ChooseAttack();
-            Attack selectedAttack = Attacks[attackChoice];
+            Console.WriteLine("PerformAttack dwarf not implemented");
+            throw new NotImplementedException();
+        }
 
-            int totalDmg = (int)ResolveAttack(selectedAttack.Name, target);
-            Mana -= selectedAttack.ManaCost;
-            target.TakeDamage(totalDmg);
 
+        // Dwarf-specific change: We use ResolveAttack to run the attack through dwarf's randomness and extra attack logic
+        public override void HandleAttack(Attack attack, Character target)
+        {
+            Console.WriteLine($"{Name} uses {attack.Name}!");
+            Mana -= attack.ManaCost;
+
+            double damage = ResolveAttack(attack.Name, target);
+            target.TakeDamage((int)damage);
         }
 
         private double ResolveAttack(string attackName, Character target)
@@ -42,73 +54,61 @@ namespace BattleBarbarians
             switch (attackName)
             {
                 case "Lucky Shot":
-                    return LuckyShot(target);
+                    return LuckyShot(target); // Dwarf-specifik logik
                 case "Double or Nothing":
-                    return DoubleOrNothing(target);
+                    return DoubleOrNothing(target); // Dwarf-specifik logik
                 default:
-                    return LuckyShot(target); // Fallback för okända attacker
+                    return CalculateDamage(AttackPower, Attacks.FirstOrDefault(a => a.Name == attackName)); // Standard attacklogik
             }
         }
 
-
-        public double LuckyShot(Character target)
+        private double LuckyShot(Character target)
         {
-            Attack luckyShot = Attacks[0];
+            // Dwarf-specifik logik för Lucky Shot
+            Attack luckyShot = Attacks.FirstOrDefault(a => a.Name == "Lucky Shot");
             double dmg = 0;
-            int chance = random.Next(1, 101); // Get a number between 1 and 100 for luck
+            int chance = random.Next(1, 101); // Get a number between 1 and 100 to determine luck
             string attackStatus = "normal";
-            string attackInfo = "";
-
+            string attackInfo = $"{Name} attacks {target.Name} with Lucky Shot, causing {dmg} damage!";
 
             if (chance <= 20) // 20% chance for a critical hit
             {
                 attackStatus = "crit";
-                dmg = (int)(CalculateDamage(AttackPower, luckyShot) * 2);
+                dmg = CalculateDamage(AttackPower, luckyShot) * 2;
+                attackInfo = $"{Name} lands a critical hit on {target.Name} with Lucky Shot, causing {dmg} damage!";
             }
             else if (chance <= 60) // 40% chance for a normal hit
             {
-                dmg = (int)(CalculateDamage(AttackPower, luckyShot));
+                dmg = CalculateDamage(AttackPower, luckyShot);
             }
-            else // 40% chance for a low damage attack
+            else // 40% chance for a low dmg attack
             {
                 attackStatus = "low";
-                dmg = (int)(CalculateDamage(AttackPower, luckyShot) * 0.5); // Half damage
-            }
-
-
-            switch (attackStatus)
-            {
-                case "normal":
-                    attackInfo = $"{Name} attacks {target.Name} with Lucky Shot, causing {dmg} damage!";
-                    break;
-                case "crit":
-                    attackInfo = $"{Name} lands a critical hit with Lucky Shot, causing {dmg} damage!";
-                    break;
-                case "low":
-                    attackInfo = $"{Name} attacks {target.Name} with Lucky Shot, but {Name} is too drunk and the shot only grazes his target causing {dmg} damage.";
-                    break;
+                dmg = CalculateDamage(AttackPower, luckyShot) * 0.5;
+                attackInfo = $"{Name} attacks {target.Name} with Lucky Shot, but {Name} is too drunk and the shot only grazes his target causing {dmg} damage.";
             }
 
             Console.WriteLine(attackInfo);
             return dmg;
         }
 
-        // Additional ability: Double or Nothing with high risk and reward
-        public double DoubleOrNothing(Character target)
+        private double DoubleOrNothing(Character target)
         {
-            Attack attack = Attacks[1];
+            // Dwarf-specifik logik för Double or Nothing
+            Attack attack = Attacks.FirstOrDefault(a => a.Name == "Double or Nothing");
             double dmg = 0;
-            int chance = random.Next(1, 101); // Random number between 1 and 100
+            int chance = random.Next(1, 101);
 
             if (chance <= 50) // 50% chance to succeed
             {
-                dmg = (int)(CalculateDamage(AttackPower, attack) * 2);
+                dmg = CalculateDamage(AttackPower, attack) * 2;
                 Console.WriteLine($"{Name} hits {target.Name} with a double strike, dealing {dmg} damage!");
             }
             else
             {
                 Console.WriteLine($"{Name} misses the Double or Nothing attack!");
             }
+
             return dmg;
         }
     }
