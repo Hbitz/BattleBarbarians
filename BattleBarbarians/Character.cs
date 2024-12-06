@@ -16,8 +16,7 @@ namespace BattleBarbarians
         public int Mana { get; set; }
         public int MaxMana { get; set; }
         public double AttackPower { get; set; }
-        public List<Attack> Attacks { get; set; } // Generic lista with attacks
-        // Because Inventory logic could be extensive and because it's not needed by all characters(rat, troll, etc), we create a InventoryManager class.
+        public List<Attack> Attacks { get; set; }
         public CharacterInventory Inventory { get; set; }
 
         public Character(string name, int health, int mana, double attackPower, List<Attack> attacks)
@@ -51,14 +50,6 @@ namespace BattleBarbarians
             {
                 // Skapa meny för attacker
                 var attackOptions = Attacks.ToDictionary(attack => attack, attack => Mana >= attack.ManaCost);
-
-                //Old
-                //var attackOptions = new Dictionary<Attack, bool>();
-                //foreach (var attack in Attacks)
-                //{
-                //    bool isAvailable = Mana >= attack.ManaCost;
-                //    attackOptions[attack] = isAvailable;
-                //}
 
                 // Menu for attacks and items
                 var promptChoices = new Dictionary<string, Action>();
@@ -147,41 +138,6 @@ namespace BattleBarbarians
             }
             return attackChoice;
         }
-
-        // Unused, not referenced by program. Safe to remove
-        public void ChooseItem()
-        {
-            var choices = new List<string>();
-            if (Inventory.IsEmpty())
-            {
-                Console.WriteLine("Inventory empty");
-                return;
-            }
-
-            var items = Inventory.GetAllItems();
-
-            // Creates a list of our items
-            var itemNames = items.Select(item => $"{item.Key.Name} ({item.Value})").ToList();
-
-            // Create menu to let player select 
-            var chosenItemName = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("[yellow]Choose an item to use:[/]")
-                    .PageSize(10) 
-                    .AddChoices(itemNames)
-            );
-
-            // Hitta föremålet användaren valde
-            var chosenItem = items.FirstOrDefault(item =>
-                $"{item.Key.Name} ({item.Value})" == chosenItemName).Key;
-
-            // Kontrollera om ett föremål har valts
-            if (chosenItem != null)
-            {
-                Inventory.UseItem(chosenItem, this);
-            }
-        }
-
 
         public void TakeDamage(int damage)
         {
