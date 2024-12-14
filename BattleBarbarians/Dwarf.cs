@@ -31,14 +31,6 @@ namespace BattleBarbarians
             // Implement special mechanics, if needed
         }
 
-        // Old way of attacking. Playable characters no longer use PerformAttack
-        public override void PerformAttack(Character target)
-        {
-            Console.WriteLine("PerformAttack dwarf not implemented");
-            throw new NotImplementedException();
-        }
-
-
         // Dwarf-specific change: We use ResolveAttack to run the attack through dwarf's randomness and extra attack logic
         public override void HandleAttack(Attack attack, Character target)
         {

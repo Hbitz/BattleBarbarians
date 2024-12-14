@@ -83,7 +83,7 @@ mm |\___/|
 
                 if (enemy.IsAlive())
                 {
-                    enemy.PerformAttack(player);
+                    enemy.PerformAttack2(player);
                 }
                 player.RecoverMana(5);
                 enemy.RecoverMana(5);

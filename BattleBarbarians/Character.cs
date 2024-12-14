@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Spectre.Console;
+﻿using Spectre.Console;
 
 namespace BattleBarbarians
 {
@@ -37,7 +32,7 @@ namespace BattleBarbarians
             return Convert.ToInt32(attackPower * attack.Damage);
         }
 
-        public abstract void PerformAttack(Character target);
+        //public abstract void PerformAttack(Character target);
 
         // New main method of attacking for all playable characters
         public virtual void PerformAttack2(Character target)

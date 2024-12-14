@@ -32,7 +32,17 @@ namespace BattleBarbarians
         {
             // Implement special mechanics
         }
-        public override void PerformAttack(Character target)
+
+
+        // Ogres are tough creatures with extreme vitality that quickly regenerates their wounds
+        private void RegenerateHealth()
+        {
+            const int regenerationAmount = 10;
+            Health += regenerationAmount;
+            if (Health > MaxHealth) Health = MaxHealth;
+            Console.WriteLine($"{Name} regenerates {regenerationAmount} HP. Current HP: {Health}/{MaxHealth}.");
+        }
+        public override void PerformAttack2(Character target)
         {
             int selectedAttackIndex = random.Next(Attacks.Count);
             Attack selectedAttack = Attacks[selectedAttackIndex];
@@ -46,7 +56,7 @@ namespace BattleBarbarians
             else
             {
                 Console.WriteLine($"{Name} tries to use {selectedAttack.Name}, but doesn't have enough mana! Using Crushing Blow instead.");
-                Attack fallbackAttack = Attacks[0]; 
+                Attack fallbackAttack = Attacks[0];
                 target.TakeDamage(fallbackAttack.Damage);
                 Mana -= fallbackAttack.ManaCost;
             }
@@ -54,14 +64,6 @@ namespace BattleBarbarians
             RegenerateHealth();
         }
 
-        // Ogres are tough creatures with extreme vitality that quickly regenerates their wounds
-        private void RegenerateHealth()
-        {
-            const int regenerationAmount = 10;
-            Health += regenerationAmount;
-            if (Health > MaxHealth) Health = MaxHealth;
-            Console.WriteLine($"{Name} regenerates {regenerationAmount} HP. Current HP: {Health}/{MaxHealth}.");
-        }
     }
 }
 

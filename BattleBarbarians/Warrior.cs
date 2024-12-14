@@ -27,15 +27,6 @@ namespace BattleBarbarians
             // Implement special mechanics
         }
 
-        // Old method of choosing attacks, no longer used
-        public override void PerformAttack(Character target)
-        {
-            int attackChoice = ChooseAttack();
 
-            Attack selectedAttack = Attacks[attackChoice];
-            int totalDmg = Convert.ToInt32(CalculateDamage(AttackPower, selectedAttack));
-            Console.WriteLine($"{Name} attacks {target.Name} with {selectedAttack.Name}, causing {totalDmg} damage.");
-            target.TakeDamage(totalDmg);
-        }
     }
 }
