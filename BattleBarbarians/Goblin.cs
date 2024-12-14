@@ -33,7 +33,7 @@ namespace BattleBarbarians
         }
 
 
-        public override void PerformAttack2(Character target)
+        public override void PerformAttack(Character target)
         {
             int attackIndex = random.Next(Attacks.Count);
             Attack chosenAttack = Attacks[attackIndex];

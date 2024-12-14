@@ -79,11 +79,11 @@ mm |\___/|
                 player.ShowInventory();
                 Console.WriteLine("\n");
 
-                player.PerformAttack2(enemy);
+                player.PerformAttack(enemy);
 
                 if (enemy.IsAlive())
                 {
-                    enemy.PerformAttack2(player);
+                    enemy.PerformAttack(player);
                 }
                 player.RecoverMana(5);
                 enemy.RecoverMana(5);

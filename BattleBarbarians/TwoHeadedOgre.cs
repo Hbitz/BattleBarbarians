@@ -42,7 +42,7 @@ namespace BattleBarbarians
             if (Health > MaxHealth) Health = MaxHealth;
             Console.WriteLine($"{Name} regenerates {regenerationAmount} HP. Current HP: {Health}/{MaxHealth}.");
         }
-        public override void PerformAttack2(Character target)
+        public override void PerformAttack(Character target)
         {
             int selectedAttackIndex = random.Next(Attacks.Count);
             Attack selectedAttack = Attacks[selectedAttackIndex];

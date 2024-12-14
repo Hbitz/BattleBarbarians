@@ -30,7 +30,7 @@ namespace BattleBarbarians
             // Implement special mechanics
         }
 
-        public override void PerformAttack2(Character target)
+        public override void PerformAttack(Character target)
         {
             Attack selectedAttack = Attacks[0];
             Console.WriteLine($"{Name} attacks {target.Name} with Bite, causing {selectedAttack.Damage} damage.");

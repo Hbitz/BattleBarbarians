@@ -34,8 +34,7 @@ namespace BattleBarbarians
 
         //public abstract void PerformAttack(Character target);
 
-        // New main method of attacking for all playable characters
-        public virtual void PerformAttack2(Character target)
+        public virtual void PerformAttack(Character target)
         {
             ApplySpecialMechanics(); // Use class-specifics mechanics
 
