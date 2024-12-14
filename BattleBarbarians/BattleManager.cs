@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 
 internal class BattleManager
 {
+        private HallOfFameManager _hallOfFameManager = new HallOfFameManager();
+
     // temp - Refactor all ASCII art to own file?
     private readonly string berserkerArt = @"
          O
@@ -102,6 +104,22 @@ mm |\___/|
                 {
                     Console.WriteLine("Wow, you have defeated the final boss!");
                     Console.WriteLine("This is a tremendous achievement, one of a kind that will go down in history");
+
+                    Console.Write("Please enter your name: ");
+                    string playerName = Console.ReadLine();
+
+                    var newEntry = new HallOfFameEntry
+                    {
+                        Name = playerName,
+                        CharacterType = player.Name, // Character type of player
+                        Health = player.Health,
+                        MaxHealth = player.MaxHealth,
+                        Mana = player.Mana,
+                        MaxMana = player.MaxMana,
+                        AttackPower = player.AttackPower,
+                    };
+
+                    _hallOfFameManager.WriteEntry(newEntry);
                     Console.WriteLine("TODO - Write/Read JSON and hall of hame");
                     running = false;
                 }
