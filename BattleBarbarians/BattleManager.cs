@@ -77,6 +77,7 @@ mm |\___/|
             {
                 PrintBattleArtAndInfo(player, enemy);
                 player.ShowInventory();
+                Console.WriteLine("\n");
 
                 player.PerformAttack2(enemy);
 
@@ -91,7 +92,7 @@ mm |\___/|
             // Restore HP/Mana on victroy
             if (player.IsAlive())
             {
-                Console.WriteLine($"{player.Name} vinner!");
+                Console.WriteLine($"{player.Name} wins!");
                 if (!isFinalLevel)
                 {
                     level++; // Increase level
@@ -120,7 +121,7 @@ mm |\___/|
                     };
 
                     _hallOfFameManager.WriteEntry(newEntry);
-                    Console.WriteLine("TODO - Write/Read JSON and hall of hame");
+                    Console.WriteLine("\n");
                     running = false;
                 }
 
@@ -161,7 +162,7 @@ mm |\___/|
         }
 
 
-        // Dela upp ASCII-konststrängarna i rader, för att skriva ut rätt positionering för fienderna
+        // Split up ASCII-strings in rows in order to print out the right positioning for enemies
         string[] berserkerLines = berserkerArt.Split('\n');
         string[] enemyLines = enemyArt.Split('\n');
 
@@ -198,20 +199,20 @@ mm |\___/|
         Random rand = new Random();
         int rewardChance = rand.Next(1, 101);
 
-        if (rewardChance <= 95)
+        if (rewardChance <= 50)
         {
-            Console.WriteLine("Du får en belöning!");
+            Console.WriteLine("You got a reward!");
 
             // todo - Highlight color?
             var rewardChoice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("Välj en belöning:")
+                    .Title("Choose your reward:")
                     .HighlightStyle(new Style(Color.White, Color.Black))
                     .AddChoices(
                     "[green]1. Permanent HP[/]", 
                     "[blue]2. Permanent Mana[/]",
                     "[red]3. Permanent Attack Power[/]",
-                    "[red]4. Hp potion[/]",
+                    "[green]4. Hp potion[/]",
                     "[blue]5. Mana potion[/]"
                     //"[white]6. Escape Scroll - Flee from one battle[/]"
                     )
@@ -222,36 +223,31 @@ mm |\___/|
             {
                 case "[green]1. Permanent HP[/]":
                     player.MaxHealth += 20;
-                    Console.WriteLine($"{player.Name} får 20 extra HP!");
+                    Console.WriteLine($"{player.Name} gets 20 extra HP!");
                     break;
                 case "[blue]2. Permanent Mana[/]":
                     player.MaxMana += 10;
-                    Console.WriteLine($"{player.Name} får 10 extra Mana!");
+                    Console.WriteLine($"{player.Name} gets 10 extra Mana!");
                     break;
                 case "[red]3. Permanent Attack Power[/]":
                     player.AttackPower += 0.1;
-                    Console.WriteLine($"{player.Name} får 10% extra Attack Power!");
+                    Console.WriteLine($"{player.Name} gets 10% extra Attack Power!");
                     break;
 
-                case "[red]4. Hp potion[/]":
+                case "[green]4. Hp potion[/]":
                     player.Inventory.AddItem(new HpPotion("Health Potion", "Restores 50hp"));
                     break;
                 case "[blue]5. Mana potion[/]":
                     player.Inventory.AddItem(new ManaPotion("Mana Potion", "Restores 35mp"));
                     break;
-                //case ""[white]6. Escape Scroll - Flee from one battle[/]":":
-                //    player.Inventory.AddItem(new Item("Escape Scroll", "Flee from one battle", (Character target) => target.Health += 50));
-                //    break;
-
-
                 default:
-                    Console.WriteLine("Ogiltigt val."); // This case will rarely be hit due to the controlled selection
+                    Console.WriteLine("Invalid choice."); // This case will rarely be hit due to the controlled selection
                     break;
             }
         }
         else
         {
-            Console.WriteLine("Tyvärr, ingen belöning denna gång.");
+            Console.WriteLine("No reward this time.");
         }
     }
 }

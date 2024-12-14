@@ -38,7 +38,7 @@ namespace BattleBarbarians
 
                 switch (selection)
                 {
-                    case "information":
+                    case "Show information":
                         ShowGameInfo();
                         break;
                     case "View Hall of Fame":
