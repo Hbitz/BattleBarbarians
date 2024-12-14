@@ -19,23 +19,21 @@ namespace BattleBarbarians
 
         public abstract void Use(Character target);
 
-
-        // Överskriver Equals och GetHashCode för att jämföra baserat på namn
-        // Vi gör detta för att jämföra Namnen på objekten, istället för referrenserna till det.
-        // När items lagras som dictionary i CharacterInventory låter denna ändringen göra så att vi enkelt kan visa hur många items av en sort det finns.
-        // Tex "Health potions - 4"
+        // Overriding Equals and GetHashCode to compare based on name of object, instead of referense to it.
+        // As items in CharacterInventory are saved as a dictionary this allows use so we can easily visually display how many items of one kind there is.
+        // "Health potions - 4" instead of four entries of "health potion" when displaying inventory.
         public override bool Equals(object obj)
         {
             if (obj is Item item)
             {
-                return Name == item.Name; // Jämför namn
+                return Name == item.Name; // Compare name
             }
             return false;
         }
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode(); // Använd namn för att generera hashkod
+            return Name.GetHashCode(); // Use name to generarte hashcode
         }
 
 

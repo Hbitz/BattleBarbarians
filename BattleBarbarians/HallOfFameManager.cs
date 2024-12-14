@@ -60,11 +60,11 @@ namespace BattleBarbarians
 
             foreach (var entry in entries)
             {
-                Console.WriteLine($"Namn: {entry.Name}");
+                Console.WriteLine($"Name: {entry.Name}");
                 Console.WriteLine($"Type: {entry.CharacterType}");
                 Console.WriteLine($"Health at end of boss battle: {entry.Health}/{entry.MaxHealth}");
                 Console.WriteLine($"Mana at end of boss battle: {entry.Mana}/{entry.MaxMana}");
-                Console.WriteLine($"Attackkraft: {entry.AttackPower}");
+                Console.WriteLine($"Attackpower: {entry.AttackPower}");
                 Console.WriteLine(new string('-', 30));
             }
         }

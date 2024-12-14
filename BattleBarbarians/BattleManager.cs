@@ -203,7 +203,6 @@ mm |\___/|
         {
             Console.WriteLine("You got a reward!");
 
-            // todo - Highlight color?
             var rewardChoice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Choose your reward:")
