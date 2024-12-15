@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BattleBarbarians
 {
+    // Todo - not yet implemented
     internal class EscapeScroll : Item
     {
         public EscapeScroll(string name, string description)

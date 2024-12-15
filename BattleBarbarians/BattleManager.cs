@@ -12,46 +12,9 @@ using System.Threading.Tasks;
 
 internal class BattleManager
 {
-        private HallOfFameManager _hallOfFameManager = new HallOfFameManager();
-
-    // temp - Refactor all ASCII art to own file?
-    private readonly string berserkerArt = @"
-         O
-        /|\
-        / \
-      (Player)";
-
-    private readonly string ratArt = @"
- ()-().----.          .
-  \""/` ___ ;_____.'
-   ` ^^   ^^
-";
-
-    private readonly string trollArt = @"
-   O
-  /|\
-   |
-  / \
- /   \
-(Troll)";
-
-    private readonly string goblinArt = @" 
-   O
-  -|-
-  / \
-(Goblin)";
-
-    private readonly string twoHeadedOgreArt = @"
-             /\
-   (_)(_)   /< \>
-   /∞\/∞\  <\ >/>
-  _\ö/\ö/_   ||
- /  O---O \_/|3
-| /|:::::|\_/||
-| ||~~~~~|   ()
-mm |\___/|
-   ||   ||
-  /_|   |_\";
+    private HallOfFameManager _hallOfFameManager = new HallOfFameManager();
+    private static readonly Random _rand = new Random(); // Used when generating new enemy
+    
     private int level = 1;
     private bool isFinalLevel = false;
 
@@ -64,7 +27,7 @@ mm |\___/|
             // bool is used to run specific code on last level
             if (level == 20)
             {
-                isFinalLevel = true; 
+                isFinalLevel = true;
             }
             Character enemy = GenerateRandomEnemy();
             // If we are on the final level, switch enemy to the final boss
@@ -77,63 +40,77 @@ mm |\___/|
             {
                 PrintBattleArtAndInfo(player, enemy);
                 player.ShowInventory();
+                Console.WriteLine("\n");
 
-                player.PerformAttack2(enemy);
-
-                if (enemy.IsAlive())
-                {
-                    enemy.PerformAttack(player);
-                }
-                player.RecoverMana(5);
-                enemy.RecoverMana(5);
+                PerformAttacks(player, enemy);
             }
 
-            // Restore HP/Mana on victroy
-            if (player.IsAlive())
-            {
-                Console.WriteLine($"{player.Name} vinner!");
-                if (!isFinalLevel)
-                {
-                    level++; // Increase level
-                    // Gives player a 50% chance for a reward
-                    GiveReward(player);
-                    player.Health = player.MaxHealth;  
-                    player.Mana = player.MaxMana;
-                }
-                else
-                {
-                    Console.WriteLine("Wow, you have defeated the final boss!");
-                    Console.WriteLine("This is a tremendous achievement, one of a kind that will go down in history");
-
-                    Console.Write("Please enter your name: ");
-                    string playerName = Console.ReadLine();
-
-                    var newEntry = new HallOfFameEntry
-                    {
-                        Name = playerName,
-                        CharacterType = player.Name, // Character type of player
-                        Health = player.Health,
-                        MaxHealth = player.MaxHealth,
-                        Mana = player.Mana,
-                        MaxMana = player.MaxMana,
-                        AttackPower = player.AttackPower,
-                    };
-
-                    _hallOfFameManager.WriteEntry(newEntry);
-                    Console.WriteLine("TODO - Write/Read JSON and hall of hame");
-                    running = false;
-                }
-
-            }
-            else
-            {
-                Console.WriteLine($"{enemy.Name} vinner!");
-                running = false;
-            }
+            running = HandleBattleEnd(player, running, enemy);
         }
     }
 
+    private bool HandleBattleEnd(Character player, bool running, Character enemy)
+    {
+        // If player wins
+        if (player.IsAlive())
+        {
+            Console.WriteLine($"{player.Name} wins!");
+            if (!isFinalLevel)
+            {
+                level++; // Increase level
+                GiveReward(player); // 50% chance for reward 
+                player.Health = player.MaxHealth;
+                player.Mana = player.MaxMana;
+            }
+            else
+            {
+                Console.WriteLine("Wow, you have defeated the final boss!");
+                Console.WriteLine("This is a tremendous achievement, one of a kind that will go down in history");
 
+                Console.Write("Please enter your name: ");
+                string playerName = Console.ReadLine();
+
+                var newEntry = new HallOfFameEntry
+                {
+                    Name = playerName,
+                    CharacterType = player.Name, // Character type of player
+                    Health = player.Health,
+                    MaxHealth = player.MaxHealth,
+                    Mana = player.Mana,
+                    MaxMana = player.MaxMana,
+                    AttackPower = player.AttackPower,
+                };
+
+                _hallOfFameManager.WriteEntry(newEntry);
+                Console.WriteLine("\n");
+                running = false;
+            }
+
+        }
+        else
+        {
+            Console.WriteLine($"{enemy.Name} vinner!");
+            Console.WriteLine("\n\n\n\n");
+            Console.WriteLine("Enter any key to play again");
+            Console.ReadLine();
+            Console.Clear();
+            running = false;
+        }
+
+        return running;
+    }
+
+    private static void PerformAttacks(Character player, Character enemy)
+    {
+        player.PerformAttack(enemy);
+
+        if (enemy.IsAlive())
+        {
+            enemy.PerformAttack(player);
+        }
+        player.RecoverMana(5);
+        enemy.RecoverMana(5);
+    }
 
     public void PrintBattleArtAndInfo(Character player, Character enemy)
     {
@@ -144,25 +121,12 @@ mm |\___/|
         Console.WriteLine(banner);
         Console.WriteLine(levelBanner);
 
+        // Get the art from our AsciiArtProvider class
+        string playerArt = AsciiArtProvider.GetAsciiArt(player.GetType().Name);
+        string enemyArt = AsciiArtProvider.GetAsciiArt(enemy.GetType().Name);
 
-        // Set enemyArt to our current enemy
-        string enemyArt = ratArt;
-        if (enemy.Name == "Goblin")
-        {
-            enemyArt = goblinArt;
-        }
-        else if (enemy.Name == "Troll")
-        {
-            enemyArt = trollArt;
-        }
-        else if (enemy.Name == "Two-Headed Ogre")
-        {
-            enemyArt = twoHeadedOgreArt;
-        }
-
-
-        // Dela upp ASCII-konststrängarna i rader, för att skriva ut rätt positionering för fienderna
-        string[] berserkerLines = berserkerArt.Split('\n');
+        // Split up ASCII-strings in rows in order to print out the right positioning for enemies
+        string[] playerLines = playerArt.Split('\n');
         string[] enemyLines = enemyArt.Split('\n');
 
         foreach (string line in enemyLines)
@@ -171,15 +135,19 @@ mm |\___/|
         }
         Console.WriteLine($"{' ',50}{enemy.Name} HP: {enemy.Health}/{enemy.MaxHealth}, MP: {enemy.Mana}/{enemy.MaxMana}");
 
-        Console.WriteLine(berserkerArt);
+        foreach (string line in playerLines)
+        {
+            Console.WriteLine(line);
+        }
+
         Console.WriteLine($"{player.Name} HP: {player.Health}/{player.MaxHealth}, MP: {player.Mana}/{player.MaxMana}");
         Console.WriteLine();
     }
 
+    //
     private Character GenerateRandomEnemy()
     {
-        Random rand = new Random();
-        int enemyType = rand.Next(1, 4);  
+        int enemyType = _rand.Next(1, 4);  
         switch (enemyType)
         {
             case 1:
@@ -198,20 +166,19 @@ mm |\___/|
         Random rand = new Random();
         int rewardChance = rand.Next(1, 101);
 
-        if (rewardChance <= 95)
+        if (rewardChance <= 50)
         {
-            Console.WriteLine("Du får en belöning!");
+            Console.WriteLine("You got a reward!");
 
-            // todo - Highlight color?
             var rewardChoice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("Välj en belöning:")
+                    .Title("Choose your reward:")
                     .HighlightStyle(new Style(Color.White, Color.Black))
                     .AddChoices(
                     "[green]1. Permanent HP[/]", 
                     "[blue]2. Permanent Mana[/]",
                     "[red]3. Permanent Attack Power[/]",
-                    "[red]4. Hp potion[/]",
+                    "[green]4. Hp potion[/]",
                     "[blue]5. Mana potion[/]"
                     //"[white]6. Escape Scroll - Flee from one battle[/]"
                     )
@@ -222,36 +189,31 @@ mm |\___/|
             {
                 case "[green]1. Permanent HP[/]":
                     player.MaxHealth += 20;
-                    Console.WriteLine($"{player.Name} får 20 extra HP!");
+                    Console.WriteLine($"{player.Name} gets 20 extra HP!");
                     break;
                 case "[blue]2. Permanent Mana[/]":
                     player.MaxMana += 10;
-                    Console.WriteLine($"{player.Name} får 10 extra Mana!");
+                    Console.WriteLine($"{player.Name} gets 10 extra Mana!");
                     break;
                 case "[red]3. Permanent Attack Power[/]":
                     player.AttackPower += 0.1;
-                    Console.WriteLine($"{player.Name} får 10% extra Attack Power!");
+                    Console.WriteLine($"{player.Name} gets 10% extra Attack Power!");
                     break;
 
-                case "[red]4. Hp potion[/]":
+                case "[green]4. Hp potion[/]":
                     player.Inventory.AddItem(new HpPotion("Health Potion", "Restores 50hp"));
                     break;
                 case "[blue]5. Mana potion[/]":
                     player.Inventory.AddItem(new ManaPotion("Mana Potion", "Restores 35mp"));
                     break;
-                //case ""[white]6. Escape Scroll - Flee from one battle[/]":":
-                //    player.Inventory.AddItem(new Item("Escape Scroll", "Flee from one battle", (Character target) => target.Health += 50));
-                //    break;
-
-
                 default:
-                    Console.WriteLine("Ogiltigt val."); // This case will rarely be hit due to the controlled selection
+                    Console.WriteLine("Invalid choice."); // This case will rarely be hit due to the controlled selection
                     break;
             }
         }
         else
         {
-            Console.WriteLine("Tyvärr, ingen belöning denna gång.");
+            Console.WriteLine("No reward this time.");
         }
     }
 }

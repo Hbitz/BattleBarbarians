@@ -8,7 +8,7 @@ namespace BattleBarbarians
 {
     internal class HallOfFameEntry
     {
-        public string Name { get; set; }  // Spelarens namn
+        public string Name { get; set; }  // Player name, user input
         public string CharacterType { get; set; }  
         public int Health { get; set; } 
         public int MaxHealth { get; set; }

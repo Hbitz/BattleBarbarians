@@ -38,7 +38,7 @@ namespace BattleBarbarians
 
                 switch (selection)
                 {
-                    case "information":
+                    case "Show information":
                         ShowGameInfo();
                         break;
                     case "View Hall of Fame":
@@ -57,7 +57,7 @@ namespace BattleBarbarians
                         }
                         break;
                     case "Exit":
-                        Console.WriteLine("Tack för att du spelade BattleBarbarians!");
+                        Console.WriteLine("Thank you for playing BattleBarbarians!");
                         return;
                 }
             }
@@ -78,7 +78,7 @@ namespace BattleBarbarians
 
         private Character CharacterSelection()
         {
-            // Skapa en lista med karaktärer att välja mellan
+            // Create a list of the playable charcaters
             var characters = new List<Character>
             {
                 new Berserker("Berserker"),
@@ -86,7 +86,7 @@ namespace BattleBarbarians
                 new Dwarf("Dwarf")
             };
 
-                // Använd Spectre.Console Selection för att låta spelaren välja en karaktär
+                // Use Spectre.Console Selection to let the user select their character
                 var selectedCharacter = AnsiConsole
                     .Prompt(
                         new SelectionPrompt<string>()

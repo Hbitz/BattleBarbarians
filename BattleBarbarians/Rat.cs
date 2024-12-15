@@ -29,6 +29,7 @@ namespace BattleBarbarians
         {
             // Implement special mechanics
         }
+
         public override void PerformAttack(Character target)
         {
             Attack selectedAttack = Attacks[0];

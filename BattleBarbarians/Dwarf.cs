@@ -31,14 +31,6 @@ namespace BattleBarbarians
             // Implement special mechanics, if needed
         }
 
-        // Old way of attacking. Playable characters no longer use PerformAttack
-        public override void PerformAttack(Character target)
-        {
-            Console.WriteLine("PerformAttack dwarf not implemented");
-            throw new NotImplementedException();
-        }
-
-
         // Dwarf-specific change: We use ResolveAttack to run the attack through dwarf's randomness and extra attack logic
         public override void HandleAttack(Attack attack, Character target)
         {
@@ -54,17 +46,17 @@ namespace BattleBarbarians
             switch (attackName)
             {
                 case "Lucky Shot":
-                    return LuckyShot(target); // Dwarf-specifik logik
+                    return LuckyShot(target); // Dwarf-specifik logic
                 case "Double or Nothing":
-                    return DoubleOrNothing(target); // Dwarf-specifik logik
+                    return DoubleOrNothing(target); // Dwarf-specifik logic
                 default:
-                    return CalculateDamage(AttackPower, Attacks.FirstOrDefault(a => a.Name == attackName)); // Standard attacklogik
+                    return CalculateDamage(AttackPower, Attacks.FirstOrDefault(a => a.Name == attackName)); // Standard attacklogic
             }
         }
 
         private double LuckyShot(Character target)
         {
-            // Dwarf-specifik logik för Lucky Shot
+            // Dwarf-specific logic for Lucky Shot
             Attack luckyShot = Attacks.FirstOrDefault(a => a.Name == "Lucky Shot");
             double dmg = 0;
             int chance = random.Next(1, 101); // Get a number between 1 and 100 to determine luck
@@ -94,7 +86,7 @@ namespace BattleBarbarians
 
         private double DoubleOrNothing(Character target)
         {
-            // Dwarf-specifik logik för Double or Nothing
+            // Dwarf-specific logic for Double or Nothing
             Attack attack = Attacks.FirstOrDefault(a => a.Name == "Double or Nothing");
             double dmg = 0;
             int chance = random.Next(1, 101);

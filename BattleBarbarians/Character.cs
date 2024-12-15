@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Spectre.Console;
+﻿using Spectre.Console;
 
 namespace BattleBarbarians
 {
@@ -37,10 +32,9 @@ namespace BattleBarbarians
             return Convert.ToInt32(attackPower * attack.Damage);
         }
 
-        public abstract void PerformAttack(Character target);
+        //public abstract void PerformAttack(Character target);
 
-        // New main method of attacking for all playable characters
-        public virtual void PerformAttack2(Character target)
+        public virtual void PerformAttack(Character target)
         {
             ApplySpecialMechanics(); // Use class-specifics mechanics
 
@@ -101,44 +95,6 @@ namespace BattleBarbarians
         }
 
 
-
-        // Old method of choosing attacks, before inventory was implemeneted. No longer used
-        // Todo - validation
-        public int ChooseAttack()
-        {
-            var choices = new List<string>();
-            for (int i = 0; i < Attacks.Count; i++)
-            {
-                choices.Add($"{Attacks[i].Name} Skada: {CalculateDamage(AttackPower, Attacks[i])}, manacost: {Attacks[i].ManaCost}");
-            }
-
-            int attackChoice = 0; // Temporarily empty
-
-            // Validaiton to ensure you can only select an attack you have enough mana for.
-            bool validAttack = false;
-            while (validAttack == false)
-            {
-
-                string selectedAttack = AnsiConsole.Prompt(
-                    new SelectionPrompt<string>()
-                    .Title($"{Name}, Välj en attack:")
-                    .AddChoices(choices)
-                    .HighlightStyle(new Style(foreground: Color.Red))
-                );
-                attackChoice = choices.IndexOf(selectedAttack);
-
-                if (Mana < Attacks[attackChoice].ManaCost)
-                {
-                    Console.WriteLine("You don't have enough mana to use that attack");
-                }
-                else
-                {
-                    validAttack = true;
-                }
-            }
-            return attackChoice;
-        }
-
         public void TakeDamage(int damage)
         {
             Health -= damage;
@@ -165,7 +121,14 @@ namespace BattleBarbarians
 
         public virtual void ShowInventory()
         {
-            Inventory.ShowInventory();
+            if (Inventory.GetAllItems().Any())
+            {
+                Inventory.ShowInventory();
+            }
+            else
+            {
+                Console.WriteLine("Inventory: Empty.");
+            }
         }
 
         public virtual void HandleAttack(Attack attack, Character target)

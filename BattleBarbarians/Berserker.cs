@@ -63,11 +63,7 @@ namespace BattleBarbarians
             return IsInBerserkState ? (int)(baseDamage * 1.3) : baseDamage;
         }
 
-        // Old function, no longer used
-        public override void PerformAttack(Character target)
-        {
-            Console.WriteLine("PerformAttack not implemeneted");
-        }
+
     }
 }
 

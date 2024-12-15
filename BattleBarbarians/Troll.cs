@@ -32,6 +32,7 @@ namespace BattleBarbarians
         {
             // Implement special mechanics
         }
+
         public override void PerformAttack(Character target)
         {
             Attack chosenAttack = Attacks[random.Next(Attacks.Count)];

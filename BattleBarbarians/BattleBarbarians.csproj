@@ -8,6 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Berserker.txt" />
+    <None Remove="Resources\Dwarf.txt" />
+    <None Remove="Resources\Goblin.txt" />
+    <None Remove="Resources\Rat.txt" />
+    <None Remove="Resources\Troll.txt" />
+    <None Remove="Resources\TwoHeadedOgre.txt" />
+    <None Remove="Resources\Warrior.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Berserker.txt" />
+    <EmbeddedResource Include="Resources\Dwarf.txt" />
+    <EmbeddedResource Include="Resources\Goblin.txt" />
+    <EmbeddedResource Include="Resources\Rat.txt" />
+    <EmbeddedResource Include="Resources\Troll.txt" />
+    <EmbeddedResource Include="Resources\TwoHeadedOgre.txt" />
+    <EmbeddedResource Include="Resources\Warrior.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Figgle" Version="0.5.1" />
     <PackageReference Include="Spectre.Console" Version="0.49.1" />
   </ItemGroup>
