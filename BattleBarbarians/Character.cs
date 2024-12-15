@@ -95,44 +95,6 @@ namespace BattleBarbarians
         }
 
 
-
-        // Old method of choosing attacks, before inventory was implemeneted. No longer used
-        // Todo - validation
-        public int ChooseAttack()
-        {
-            var choices = new List<string>();
-            for (int i = 0; i < Attacks.Count; i++)
-            {
-                choices.Add($"{Attacks[i].Name} Skada: {CalculateDamage(AttackPower, Attacks[i])}, manacost: {Attacks[i].ManaCost}");
-            }
-
-            int attackChoice = 0; // Temporarily empty
-
-            // Validaiton to ensure you can only select an attack you have enough mana for.
-            bool validAttack = false;
-            while (validAttack == false)
-            {
-
-                string selectedAttack = AnsiConsole.Prompt(
-                    new SelectionPrompt<string>()
-                    .Title($"{Name}, Välj en attack:")
-                    .AddChoices(choices)
-                    .HighlightStyle(new Style(foreground: Color.Red))
-                );
-                attackChoice = choices.IndexOf(selectedAttack);
-
-                if (Mana < Attacks[attackChoice].ManaCost)
-                {
-                    Console.WriteLine("You don't have enough mana to use that attack");
-                }
-                else
-                {
-                    validAttack = true;
-                }
-            }
-            return attackChoice;
-        }
-
         public void TakeDamage(int damage)
         {
             Health -= damage;
