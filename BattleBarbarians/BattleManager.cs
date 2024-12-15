@@ -145,25 +145,12 @@ mm |\___/|
         Console.WriteLine(banner);
         Console.WriteLine(levelBanner);
 
-
-        // Set enemyArt to our current enemy
-        string enemyArt = ratArt;
-        if (enemy.Name == "Goblin")
-        {
-            enemyArt = goblinArt;
-        }
-        else if (enemy.Name == "Troll")
-        {
-            enemyArt = trollArt;
-        }
-        else if (enemy.Name == "Two-Headed Ogre")
-        {
-            enemyArt = twoHeadedOgreArt;
-        }
-
+        // Get the art from our AsciiArtProvider class
+        string playerArt = AsciiArtProvider.GetAsciiArt(player.GetType().Name);
+        string enemyArt = AsciiArtProvider.GetAsciiArt(enemy.GetType().Name);
 
         // Split up ASCII-strings in rows in order to print out the right positioning for enemies
-        string[] berserkerLines = berserkerArt.Split('\n');
+        string[] playerLines = playerArt.Split('\n');
         string[] enemyLines = enemyArt.Split('\n');
 
         foreach (string line in enemyLines)
@@ -172,7 +159,11 @@ mm |\___/|
         }
         Console.WriteLine($"{' ',50}{enemy.Name} HP: {enemy.Health}/{enemy.MaxHealth}, MP: {enemy.Mana}/{enemy.MaxMana}");
 
-        Console.WriteLine(berserkerArt);
+        foreach (string line in playerLines)
+        {
+            Console.WriteLine(line);
+        }
+
         Console.WriteLine($"{player.Name} HP: {player.Health}/{player.MaxHealth}, MP: {player.Mana}/{player.MaxMana}");
         Console.WriteLine();
     }
