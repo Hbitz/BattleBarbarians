@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 internal class BattleManager
 {
     private HallOfFameManager _hallOfFameManager = new HallOfFameManager();
+    private static readonly Random _rand = new Random(); // Used when generating new enemy
     
     private int level = 1;
     private bool isFinalLevel = false;
@@ -26,7 +27,7 @@ internal class BattleManager
             // bool is used to run specific code on last level
             if (level == 20)
             {
-                isFinalLevel = true; 
+                isFinalLevel = true;
             }
             Character enemy = GenerateRandomEnemy();
             // If we are on the final level, switch enemy to the final boss
@@ -41,62 +42,75 @@ internal class BattleManager
                 player.ShowInventory();
                 Console.WriteLine("\n");
 
-                player.PerformAttack(enemy);
-
-                if (enemy.IsAlive())
-                {
-                    enemy.PerformAttack(player);
-                }
-                player.RecoverMana(5);
-                enemy.RecoverMana(5);
+                PerformAttacks(player, enemy);
             }
 
-            // Restore HP/Mana on victroy
-            if (player.IsAlive())
-            {
-                Console.WriteLine($"{player.Name} wins!");
-                if (!isFinalLevel)
-                {
-                    level++; // Increase level
-                    // Gives player a 50% chance for a reward
-                    GiveReward(player);
-                    player.Health = player.MaxHealth;  
-                    player.Mana = player.MaxMana;
-                }
-                else
-                {
-                    Console.WriteLine("Wow, you have defeated the final boss!");
-                    Console.WriteLine("This is a tremendous achievement, one of a kind that will go down in history");
-
-                    Console.Write("Please enter your name: ");
-                    string playerName = Console.ReadLine();
-
-                    var newEntry = new HallOfFameEntry
-                    {
-                        Name = playerName,
-                        CharacterType = player.Name, // Character type of player
-                        Health = player.Health,
-                        MaxHealth = player.MaxHealth,
-                        Mana = player.Mana,
-                        MaxMana = player.MaxMana,
-                        AttackPower = player.AttackPower,
-                    };
-
-                    _hallOfFameManager.WriteEntry(newEntry);
-                    Console.WriteLine("\n");
-                    running = false;
-                }
-
-            }
-            else
-            {
-                Console.WriteLine($"{enemy.Name} vinner!");
-                running = false;
-            }
+            running = HandleBattleEnd(player, running, enemy);
         }
     }
 
+    private bool HandleBattleEnd(Character player, bool running, Character enemy)
+    {
+        // If player wins
+        if (player.IsAlive())
+        {
+            Console.WriteLine($"{player.Name} wins!");
+            if (!isFinalLevel)
+            {
+                level++; // Increase level
+                GiveReward(player); // 50% chance for reward 
+                player.Health = player.MaxHealth;
+                player.Mana = player.MaxMana;
+            }
+            else
+            {
+                Console.WriteLine("Wow, you have defeated the final boss!");
+                Console.WriteLine("This is a tremendous achievement, one of a kind that will go down in history");
 
+                Console.Write("Please enter your name: ");
+                string playerName = Console.ReadLine();
+
+                var newEntry = new HallOfFameEntry
+                {
+                    Name = playerName,
+                    CharacterType = player.Name, // Character type of player
+                    Health = player.Health,
+                    MaxHealth = player.MaxHealth,
+                    Mana = player.Mana,
+                    MaxMana = player.MaxMana,
+                    AttackPower = player.AttackPower,
+                };
+
+                _hallOfFameManager.WriteEntry(newEntry);
+                Console.WriteLine("\n");
+                running = false;
+            }
+
+        }
+        else
+        {
+            Console.WriteLine($"{enemy.Name} vinner!");
+            Console.WriteLine("\n\n\n\n");
+            Console.WriteLine("Enter any key to play again");
+            Console.ReadLine();
+            Console.Clear();
+            running = false;
+        }
+
+        return running;
+    }
+
+    private static void PerformAttacks(Character player, Character enemy)
+    {
+        player.PerformAttack(enemy);
+
+        if (enemy.IsAlive())
+        {
+            enemy.PerformAttack(player);
+        }
+        player.RecoverMana(5);
+        enemy.RecoverMana(5);
+    }
 
     public void PrintBattleArtAndInfo(Character player, Character enemy)
     {
@@ -130,10 +144,10 @@ internal class BattleManager
         Console.WriteLine();
     }
 
+    //
     private Character GenerateRandomEnemy()
     {
-        Random rand = new Random();
-        int enemyType = rand.Next(1, 4);  
+        int enemyType = _rand.Next(1, 4);  
         switch (enemyType)
         {
             case 1:
