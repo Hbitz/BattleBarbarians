@@ -12,46 +12,8 @@ using System.Threading.Tasks;
 
 internal class BattleManager
 {
-        private HallOfFameManager _hallOfFameManager = new HallOfFameManager();
-
-    // temp - Refactor all ASCII art to own file?
-    private readonly string berserkerArt = @"
-         O
-        /|\
-        / \
-      (Player)";
-
-    private readonly string ratArt = @"
- ()-().----.          .
-  \""/` ___ ;_____.'
-   ` ^^   ^^
-";
-
-    private readonly string trollArt = @"
-   O
-  /|\
-   |
-  / \
- /   \
-(Troll)";
-
-    private readonly string goblinArt = @" 
-   O
-  -|-
-  / \
-(Goblin)";
-
-    private readonly string twoHeadedOgreArt = @"
-             /\
-   (_)(_)   /< \>
-   /∞\/∞\  <\ >/>
-  _\ö/\ö/_   ||
- /  O---O \_/|3
-| /|:::::|\_/||
-| ||~~~~~|   ()
-mm |\___/|
-   ||   ||
-  /_|   |_\";
+    private HallOfFameManager _hallOfFameManager = new HallOfFameManager();
+    
     private int level = 1;
     private bool isFinalLevel = false;
 
