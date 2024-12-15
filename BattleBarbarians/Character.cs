@@ -121,7 +121,14 @@ namespace BattleBarbarians
 
         public virtual void ShowInventory()
         {
-            Inventory.ShowInventory();
+            if (Inventory.GetAllItems().Any())
+            {
+                Inventory.ShowInventory();
+            }
+            else
+            {
+                Console.WriteLine("Inventory: Empty.");
+            }
         }
 
         public virtual void HandleAttack(Attack attack, Character target)
