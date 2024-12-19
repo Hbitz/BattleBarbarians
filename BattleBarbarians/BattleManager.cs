@@ -41,13 +41,11 @@ internal class BattleManager
 
             while (player.IsAlive() && enemy.IsAlive())
             {
-                PrintBattleArtAndInfo(player, enemy, battleLog);
+                PrintBattleArtAndInfo(player, enemy);
                 player.ShowInventory();
                 Console.WriteLine("\n");
 
-                // Capture the actions from PerformAttacks to our battle log.
-                var roundLog = CaptureBattleLog(() => PerformAttacks(player, enemy));
-                battleLog.AddRange(roundLog);
+                PerformAttacks(player, enemy);
             }
 
             running = HandleBattleEnd(player, running, enemy);
@@ -117,35 +115,8 @@ internal class BattleManager
         enemy.RecoverMana(5);
     }
 
-    private List<string> CaptureBattleLog(Action action)
+    public void PrintBattleArtAndInfo(Character player, Character enemy)
     {
-        var log = new List<string>();
-
-        using (var writer = new StringWriter())
-        {
-            var originalOut = Console.Out; // Spara the original stream
-            Console.SetOut(writer); // Switch out to a StringWriter
-
-            try
-            {
-                action.Invoke(); // Run original code
-                writer.Flush();
-                log.AddRange(writer.ToString().Split(Environment.NewLine));
-            }
-            finally
-            {
-                Console.SetOut(originalOut); // Restore console
-            }
-        }
-
-        return log.Where(line => !string.IsNullOrWhiteSpace(line)).ToList(); // Remove empty lines
-    }
-
-
-    public void PrintBattleArtAndInfo(Character player, Character enemy, List<string> battleLog)
-    {
-        Console.Clear();
-
         string text = "BattleBarbarians!";
         string banner = FiggleFonts.Standard.Render(text);
         string levelText = "Level " + level.ToString();
@@ -173,16 +144,6 @@ internal class BattleManager
         }
 
         Console.WriteLine($"{player.Name} HP: {player.Health}/{player.MaxHealth}, MP: {player.Mana}/{player.MaxMana}");
-
-        Console.WriteLine();
-        // Visa stridsloggen ovanför inventariet
-        Console.WriteLine("\nBattle Log:");
-        foreach (string log in battleLog)
-        {
-            Console.WriteLine(log);
-        }
-        // Since we only want to display the log of our last turn, we clear it between every usage to avoid stacking the old messages with the new
-        battleLog.Clear(); 
 
         Console.WriteLine();
     }
