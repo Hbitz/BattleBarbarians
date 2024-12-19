@@ -32,8 +32,6 @@ namespace BattleBarbarians
             return Convert.ToInt32(attackPower * attack.Damage);
         }
 
-        //public abstract void PerformAttack(Character target);
-
         public virtual void PerformAttack(Character target)
         {
             ApplySpecialMechanics(); // Use class-specifics mechanics
@@ -42,7 +40,7 @@ namespace BattleBarbarians
 
             while (!actionPerformed)
             {
-                // Skapa meny för attacker
+                // Create menu for attacks in form of dict. Key: Attack object, Value: boolean(if character has enough mana for it)
                 var attackOptions = Attacks.ToDictionary(attack => attack, attack => Mana >= attack.ManaCost);
 
                 // Menu for attacks and items
@@ -57,6 +55,7 @@ namespace BattleBarbarians
                     {
                         if (option.Value)
                         {
+                            // Only if the player selects an action they have mana will we move on.
                             HandleAttack(option.Key, target);
                             actionPerformed = true;
                         }
