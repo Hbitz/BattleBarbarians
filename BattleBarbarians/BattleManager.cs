@@ -92,11 +92,12 @@ internal class BattleManager
         }
         else
         {
-            Console.WriteLine($"{enemy.Name} vinner!");
+            Console.WriteLine($"{enemy.Name} wins!");
             Console.WriteLine("\n\n\n\n");
             Console.WriteLine("Enter any key to play again");
             Console.ReadLine();
             Console.Clear();
+            level = 1;
             running = false;
         }
 
