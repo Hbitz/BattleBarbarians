@@ -24,9 +24,6 @@ internal class BattleManager
         // Keep running game loop until we reach lvl 20 or player dies
         while (running)
         {
-            // Combat log so we can easily save each action of our battles and neatly print it out later.
-            List<string> battleLog = new List<string>();
-
             // bool is used to run specific code on last level
             if (level == 20)
             {
@@ -149,7 +146,6 @@ internal class BattleManager
         Console.WriteLine();
     }
 
-    //
     private Character GenerateRandomEnemy()
     {
         int enemyType = _rand.Next(1, 4);  
