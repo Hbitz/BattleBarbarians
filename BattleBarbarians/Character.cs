@@ -67,10 +67,10 @@ namespace BattleBarbarians
                     };
                 }
 
-                // Add items to menu
+                // Add items to menu.  Key = Item object, Value = how many of the items the player has.
                 foreach (var item in Inventory.GetAllItems())
                 {
-                    string description = $"{item.Key.Name} x{item.Value}";
+                    string description = $"{item.Key.Name} x{item.Value} - {item.Key.GetDescription()}";
                     promptChoices[description] = () =>
                     {
                         HandleItem(item.Key);
