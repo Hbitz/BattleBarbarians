@@ -24,6 +24,9 @@ internal class BattleManager
         // Keep running game loop until we reach lvl 20 or player dies
         while (running)
         {
+            // Combat log so we can easily save each action of our battles and neatly print it out later.
+            List<string> battleLog = new List<string>();
+
             // bool is used to run specific code on last level
             if (level == 20)
             {
@@ -89,11 +92,12 @@ internal class BattleManager
         }
         else
         {
-            Console.WriteLine($"{enemy.Name} vinner!");
+            Console.WriteLine($"{enemy.Name} wins!");
             Console.WriteLine("\n\n\n\n");
             Console.WriteLine("Enter any key to play again");
             Console.ReadLine();
             Console.Clear();
+            level = 1;
             running = false;
         }
 
@@ -141,6 +145,7 @@ internal class BattleManager
         }
 
         Console.WriteLine($"{player.Name} HP: {player.Health}/{player.MaxHealth}, MP: {player.Mana}/{player.MaxMana}");
+
         Console.WriteLine();
     }
 
@@ -175,11 +180,11 @@ internal class BattleManager
                     .Title("Choose your reward:")
                     .HighlightStyle(new Style(Color.White, Color.Black))
                     .AddChoices(
-                    "[green]1. Permanent HP[/]", 
-                    "[blue]2. Permanent Mana[/]",
-                    "[red]3. Permanent Attack Power[/]",
-                    "[green]4. Hp potion[/]",
-                    "[blue]5. Mana potion[/]"
+                    "[green]1. Permanent HP - 20hp[/]", 
+                    "[blue]2. Permanent Mana - 10mp[/]",
+                    "[red]3. Permanent Attack Power - 10% additive multiplier[/]",
+                    "[green]4. Hp potion - Restores 50hp[/]",
+                    "[blue]5. Mana potion - Restores 35mp[/]"
                     //"[white]6. Escape Scroll - Flee from one battle[/]"
                     )
             );
@@ -187,24 +192,24 @@ internal class BattleManager
             // Map the selected choice to a reward
             switch (rewardChoice)
             {
-                case "[green]1. Permanent HP[/]":
+                case "[green]1. Permanent HP - 20hp[/]":
                     player.MaxHealth += 20;
                     Console.WriteLine($"{player.Name} gets 20 extra HP!");
                     break;
-                case "[blue]2. Permanent Mana[/]":
+                case "[blue]2. Permanent Mana - 10mp[/]":
                     player.MaxMana += 10;
                     Console.WriteLine($"{player.Name} gets 10 extra Mana!");
                     break;
-                case "[red]3. Permanent Attack Power[/]":
+                case "[red]3. Permanent Attack Power - 10% additive multiplier[/]":
                     player.AttackPower += 0.1;
                     Console.WriteLine($"{player.Name} gets 10% extra Attack Power!");
                     break;
 
-                case "[green]4. Hp potion[/]":
-                    player.Inventory.AddItem(new HpPotion("Health Potion", "Restores 50hp"));
+                case "[green]4. Hp potion - Restores 50hp[/]":
+                    player.Inventory.AddItem(new HpPotion("Health Potion", "Restores 50hp", 50));
                     break;
-                case "[blue]5. Mana potion[/]":
-                    player.Inventory.AddItem(new ManaPotion("Mana Potion", "Restores 35mp"));
+                case "[blue]5. Mana potion - Restores 35mp[/]":
+                    player.Inventory.AddItem(new ManaPotion("Mana Potion", "Restores 35mp", 35));
                     break;
                 default:
                     Console.WriteLine("Invalid choice."); // This case will rarely be hit due to the controlled selection

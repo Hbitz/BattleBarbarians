@@ -36,6 +36,11 @@ namespace BattleBarbarians
             return Name.GetHashCode(); // Use name to generarte hashcode
         }
 
+        public string GetDescription()
+        {
+            return Description;
+        }
+
 
     }
 }
