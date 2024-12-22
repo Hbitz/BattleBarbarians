@@ -12,6 +12,7 @@ namespace BattleBarbarians
     internal class Troll : Character
     {
         private Random random;
+        public string Description { get; set; }
 
         public Troll()
             : base(
@@ -27,6 +28,11 @@ namespace BattleBarbarians
             )
         {
             random = new Random();
+            Description = "The troll has high health and a few strong attack abilities.";
+        }
+        public string GetDescription()
+        {
+            return Description;
         }
         protected override void ApplySpecialMechanics()
         {

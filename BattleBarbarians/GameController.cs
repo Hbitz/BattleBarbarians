@@ -14,10 +14,11 @@ namespace BattleBarbarians
     {
         private BattleManager battleManager;
         private HallOfFameManager hallOfFameManager = new HallOfFameManager();
+        private Bestiary bestiary = new Bestiary();
 
         public GameController()
         {
-            battleManager = new BattleManager();
+            battleManager = new BattleManager(bestiary);
         }
 
         public void StartGame()
@@ -33,7 +34,7 @@ namespace BattleBarbarians
                 var selection = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                         .Title("What would you like to do?")
-                        .AddChoices("Show information", "Start game", "View Hall of Fame", "Exit")
+                        .AddChoices("Show information", "Start game", "View Hall of Fame", "Show Bestiary", "Exit")
                 );
 
                 switch (selection)
@@ -55,6 +56,9 @@ namespace BattleBarbarians
                         {
                             Console.WriteLine("No character selected. Try again.");
                         }
+                        break;
+                    case "Show Bestiary":
+                        bestiary.ShowDiscoveredEntries();
                         break;
                     case "Exit":
                         Console.WriteLine("Thank you for playing BattleBarbarians!");
