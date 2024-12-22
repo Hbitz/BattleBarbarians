@@ -73,6 +73,9 @@ namespace BattleBarbarians
             Console.WriteLine("\tBerserker - A fierce commander with multiple attacks and offensive capabilities");
             Console.WriteLine("\tWarrior - A standard fighter with good balance between offense and defense");
             Console.WriteLine("\tDwarf - A curageous but weak fighter which relies on luck. This if meant for hardcore players.");
+            Console.WriteLine();
+            Console.WriteLine("After each battle your HP & Mana are fully regenerated.");
+            Console.WriteLine("When defeating an enemy you have a 50% chance to recieve a reward.");
 
         }
 
