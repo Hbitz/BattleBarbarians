@@ -12,6 +12,7 @@ namespace BattleBarbarians
     internal class TwoHeadedOgre : Character
     {
         private Random random;
+        public string Description { get; set; }
 
         public TwoHeadedOgre()
             : base(
@@ -27,6 +28,11 @@ namespace BattleBarbarians
                   })
         {
             random = new Random();
+            Description = "The two headed ogre is the final boss. \nIt's high health, hard-hitting attacks and regenerative abilities boasts of a threat only encountered in legends.";
+        }
+        public string GetDescription()
+        {
+            return Description;
         }
         protected override void ApplySpecialMechanics()
         {

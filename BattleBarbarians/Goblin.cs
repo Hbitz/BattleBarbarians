@@ -12,6 +12,7 @@ namespace BattleBarbarians
     internal class Goblin : Character
     {
         private Random random;
+        public string Description { get; set; }
 
         public Goblin()
             : base(
@@ -26,6 +27,11 @@ namespace BattleBarbarians
             )
         {
             random = new Random();
+            Description = "The goblin has low HP and moderate attacks.";
+        }
+        public string GetDescription()
+        {
+            return Description;
         }
         protected override void ApplySpecialMechanics()
         {

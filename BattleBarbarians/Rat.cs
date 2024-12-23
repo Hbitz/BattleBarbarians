@@ -11,6 +11,7 @@ namespace BattleBarbarians
 {
     internal class Rat : Character
     {
+        public string Description { get; set; }
         // Easy and predictable enemy.
         public Rat()
             : base(
@@ -24,6 +25,11 @@ namespace BattleBarbarians
                   }
             )
         {
+            Description = "The rat is an easy enemy with moderate health and weak attacks.";
+        }
+        public string GetDescription()
+        {
+            return Description;
         }
         protected override void ApplySpecialMechanics()
         {

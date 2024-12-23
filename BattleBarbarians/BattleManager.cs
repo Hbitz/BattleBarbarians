@@ -12,11 +12,17 @@ using System.Threading.Tasks;
 
 internal class BattleManager
 {
-    private HallOfFameManager _hallOfFameManager = new HallOfFameManager();
+    private HallOfFameManager _hallOfFameManager = new HallOfFameManager(); 
     private static readonly Random _rand = new Random(); // Used when generating new enemy
+    private Bestiary Bestiary; // Constructor recieves this from BattleManager. Do the same with _hallOfFameManger?
     
     private int level = 1;
     private bool isFinalLevel = false;
+
+    public BattleManager(Bestiary bestiary)
+    {
+        Bestiary = bestiary;
+    }
 
     public void StartBattle(Character player)
     {
@@ -35,6 +41,9 @@ internal class BattleManager
             {
                 enemy = new TwoHeadedOgre();
             }
+            // Add and discover the enemy to the bestiary.
+            Bestiary.AddEntry(enemy.GetType().Name, "test", enemy.Attacks);
+            Bestiary.Discover(enemy.GetType().Name);
 
             while (player.IsAlive() && enemy.IsAlive())
             {
@@ -95,6 +104,7 @@ internal class BattleManager
             Console.ReadLine();
             Console.Clear();
             level = 1;
+            isFinalLevel = false;
             running = false;
         }
 
