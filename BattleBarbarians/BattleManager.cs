@@ -104,6 +104,7 @@ internal class BattleManager
             Console.ReadLine();
             Console.Clear();
             level = 1;
+            isFinalLevel = false;
             running = false;
         }
 
